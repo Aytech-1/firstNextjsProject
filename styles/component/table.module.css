@@ -1,0 +1,142 @@
+.dashboardWrapper {
+    width: 100%;
+    height: calc(100% - 100px);
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    background: var(--bg-color);
+}
+
+.dashboardWrapperInner {
+    width: 97%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tableContentDiv {
+    width: 100%;
+    min-height: 300px;
+    background: var(--white-color);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.icon {
+    height: 20px;
+    font-size: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+
+.tableContentDivInner {
+    width: 95%;
+    margin: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background: #f8f8f8;
+    font-size: 13px;
+    color: #444;
+    font-weight: 500;
+    text-align: left;
+}
+
+.table thead th {
+    padding: 10px 0 10px 15px;
+}
+
+.table thead tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: all ease-in-out 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: #fcfcfc;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+.table tbody tr td {
+    font-size: 12px;
+    color: #7c7c7c;
+    padding: 10px 0 10px 15px;
+    text-align: left;
+}
+
+.profileDiv {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tableImageDiv {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 5px;
+}
+
+.username {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+
+.username span,
+.info h3,
+.info span {
+    font-size: 13px;
+}
+
+.status {
+    border-radius: 5px;
+    font-weight: 500;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.activeStatus {
+    color: var(--active-color);
+    background: var(--active-color2);
+}
+
+.inactiveStatus {
+    color: #842029;
+    background: #f8d7da;
+}
+
+.view span {
+    color: var(--white-color);
+    font-weight: bold;
+    font-size: 10px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    background-image: linear-gradient(to right, #9d043c, #F5874F);
+    display: inline-block;
+}
