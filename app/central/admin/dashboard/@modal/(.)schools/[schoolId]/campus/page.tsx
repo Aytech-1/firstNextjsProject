@@ -128,7 +128,7 @@ const CampusPage = () => {
                                                 </span>
                                             </td>
                                             <td className={tableStyles.view}>
-                                                <Link href={`/central/admin/dashboard/schools/${campus.campusId}`}>
+                                                <Link href={`/central/admin/dashboard/schools/${schoolId}/campus/${campus.campusId}`}>
                                                     <span>VIEW</span>
                                                 </Link>
                                             </td>

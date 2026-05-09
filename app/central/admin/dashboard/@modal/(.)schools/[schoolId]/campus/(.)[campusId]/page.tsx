@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/ui/button";
 
-const ViewSchoolProfile = () => {
+const ViewCampusProfile = () => {
     const router = useRouter();
 
     return (
@@ -30,7 +30,7 @@ const ViewSchoolProfile = () => {
                                     Status
                                 </span>
                                 <span>| LAST LOGIN</span>
-                                <strong>2026-04-3</strong>
+                                <strong>2026-04-38</strong>
                             </div>
                         </div>
 
@@ -56,4 +56,4 @@ const ViewSchoolProfile = () => {
     );
 };
 
-export default ViewSchoolProfile;
+export default ViewCampusProfile;

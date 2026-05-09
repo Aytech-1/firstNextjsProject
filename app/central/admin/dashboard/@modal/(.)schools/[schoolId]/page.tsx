@@ -30,7 +30,7 @@ const ViewSchoolProfile = () => {
                                     Status
                                 </span>
                                 <span>| LAST LOGIN</span>
-                                <strong>2026-04-30</strong>
+                                <strong>2026-04-35</strong>
                             </div>
                         </div>
 
