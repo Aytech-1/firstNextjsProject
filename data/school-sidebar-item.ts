@@ -20,6 +20,12 @@ export const useSchoolSidebarItems = () => {
       icon: LayoutGrid,
     },
 
+     {
+      name: "staff",
+      link: `/central/admin/dashboard/schools/${schoolId}/staff`,
+      icon: GitBranchPlus,
+    },
+
     {
       name: "campus",
       link: `/central/admin/dashboard/schools/${schoolId}/campus`,

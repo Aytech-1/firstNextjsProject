@@ -21,6 +21,18 @@ export const useCampusSidebarItems = () => {
     },
 
     {
+      name: "faculty",
+      link: `/central/admin/dashboard/schools/${schoolId}/campus/${campusId}/faculty`,
+      icon: GitBranchPlus,
+    },
+
+    {
+      name: "department",
+      link: `/central/admin/dashboard/schools/${schoolId}/campus/${campusId}/department`,
+      icon: GitBranchPlus,
+    },
+
+    {
       name: "staff",
       link: `/central/admin/dashboard/schools/${schoolId}/campus/${campusId}/staff`,
       icon: GitBranchPlus,

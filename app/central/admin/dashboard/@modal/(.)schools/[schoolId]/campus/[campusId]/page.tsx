@@ -4,14 +4,14 @@ import styles from "@/styles/component/view-staff.module.css";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/ui/button";
-import Header from "@/components/layout/school/header";
-import SideNav from "@/components/layout/school/side-nav";
+import Header from "@/components/layout/campus/header";
+import SideNav from "@/components/layout/campus/side-nav";
 
-
-const ViewSchoolProfile = () => {
+const ViewCampusProfile = () => {
     const router = useRouter();
 
     return (
+
         <div className="relative w-full h-full overflow-hidden">
             <Image
                 src="/all-images/bg-pix/adminbg.jpg"
@@ -44,7 +44,7 @@ const ViewSchoolProfile = () => {
                                             Status
                                         </span>
                                         <span>| LAST LOGIN</span>
-                                        <strong>2026-04-35</strong>
+                                        <strong>2026-04-38</strong>
                                     </div>
                                 </div>
 
@@ -54,12 +54,12 @@ const ViewSchoolProfile = () => {
                         <div className={styles.formWrapper}>
                             <div className={styles.formInner}>
 
-                                <div className="max-w-50 flex  flex-col justify-end items-end">
+                                <div className="max-w-50 flex flex-col justify-end items-end">
                                     <Button
                                         id="update-btn"
-                                        text="SCHOOL DASHBOARD"
+                                        text="CAMPUS DAHBAORD"
+                                        type="button"
                                     />
-                                    <h2></h2>
                                 </div>
 
                             </div>
@@ -68,9 +68,8 @@ const ViewSchoolProfile = () => {
                     </div>
                 </div>
             </main>
-
-        </div>
+        </div >
     );
 };
 
-export default ViewSchoolProfile;
+export default ViewCampusProfile;

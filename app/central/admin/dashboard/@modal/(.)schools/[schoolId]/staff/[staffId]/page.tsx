@@ -8,11 +8,11 @@ import InputField from "@/components/ui/text-field";
 import SelectField from "@/components/ui/select-field";
 import Button from "@/components/ui/button";
 
-const ViewSchoolProfile = () => {
+const ViewStaffProfile = () => {
     const router = useRouter();
 
     return (
-        <div className={styles.container} >  
+        <div className={styles.container} >
             <div className={styles.header}>
                 <div className={styles.headerInner}>
                     <div className={styles.headerLeft}>
@@ -20,7 +20,7 @@ const ViewSchoolProfile = () => {
                             <UserCheck size={16} />
                         </div>
                         
-                        <span>SCHOOL PROFILE</span>
+                        <span>STAFF PROFILE</span>
                     </div>
 
                     <div className={styles.closeBtn} onClick={() => router.back()}>
@@ -43,7 +43,7 @@ const ViewSchoolProfile = () => {
                         </div>
 
                         <div className={styles.text}>
-                            <h2>MR ADEYEMI AYOBAMI SAMSON</h2>
+                            <h2>MR ADEYEMI AYOBAMI</h2>
                             <div className={styles.meta}>
                                 <span className={`${styles.status} ${styles.active}`}>
                                     Status
@@ -196,18 +196,18 @@ const ViewSchoolProfile = () => {
 
                             <div className={styles.fieldGroup}>
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="role"
-                                        label="Role"
-                                        readOnly
+                                        label="Select Role"
+                                        options={[]}
                                     />
                                 </div>
 
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="status"
-                                        label="Status"
-                                        readOnly
+                                        label="Select Status"
+                                        options={[]}
                                     />
                                 </div>
                             </div>
@@ -229,4 +229,4 @@ const ViewSchoolProfile = () => {
     );
 };
 
-export default ViewSchoolProfile;
+export default ViewStaffProfile;

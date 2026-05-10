@@ -43,7 +43,7 @@ const SchoolPage = () => {
 
                     <div className={styles.addNew}>
                         <SquarePlus />
-                        <Link href="/central/admin/dashboard/addschool">ADD NEW SCHOOL</Link>
+                        <Link href="/central/admin/dashboard/schools/addschool">ADD NEW SCHOOL</Link>
 
                     </div>
 

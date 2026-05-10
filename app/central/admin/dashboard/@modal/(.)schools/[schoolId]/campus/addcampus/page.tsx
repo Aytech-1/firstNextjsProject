@@ -42,7 +42,7 @@ const AddCampusPage = () => {
                         </div>
 
                         <div className="text-[18px]  text-(--secondary-color)">
-                            CREATE NEW STAFF
+                            CREATE NEW CAMPUS
                         </div>
                     </div>
 
@@ -57,7 +57,7 @@ const AddCampusPage = () => {
 
             <div className="absolute bottom-0 right-0 w-full h-[calc(100%-60px)] overflow-auto flex flex-col">
                 <p className="px-5 py-3 text-sm text-(--link-color) bg-[rgba(250,245,229,0.5)] shadow">
-                    You are about to create a new staff, please complete the form below
+                    You are about to create a new campus, please complete the form below
                 </p>
 
                 <div className="flex justify-center py-5 bg-[#f8f8f8]">
@@ -67,7 +67,7 @@ const AddCampusPage = () => {
                             <div className="flex items-center gap-2 border-b pb-2">
                                 <UserPlus size={18} className="text-(--primary-color2)" />
                                 <span className="text-sm text-gray-500">
-                                    Create new staff here
+                                    Create new campus here
                                 </span>
                             </div>
 
@@ -145,13 +145,6 @@ const AddCampusPage = () => {
                                         text="SUBMIT"
                                         type="button"
                                         onClick={() => console.log("Submit")}
-                                    />
-
-                                    <Button
-                                        id="toast-btn"
-                                        text="SHOW TOAST"
-                                        type="button"
-                                        onClick={() => showToast("Staff created successfully") }
                                     />
                                 </div>
 
