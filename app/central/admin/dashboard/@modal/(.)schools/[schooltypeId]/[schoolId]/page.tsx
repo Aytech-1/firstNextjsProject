@@ -8,6 +8,7 @@ import Header from "@/components/layout/school/header";
 import SideNav from "@/components/layout/school/side-nav";
 
 
+
 const ViewSchoolProfile = () => {
     const router = useRouter();
 
