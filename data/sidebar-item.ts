@@ -36,4 +36,10 @@ export const sidebarItems = [
     link: "/central/admin/dashboard/report",
     icon: ClipboardMinus,
   },
+
+  {
+    name: "logout",
+    link: "/central/admin/dashboard/logout",
+    icon: ClipboardMinus,
+  },
 ];
