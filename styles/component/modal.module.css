@@ -1,0 +1,132 @@
+.modalWrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modalCard {
+  width: 100%;
+  max-width: 450px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 10px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: fadeInUp 0.3s ease;
+}
+
+.modalContent {
+  padding: 40px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+}
+
+.info {
+  background: #0ea5e9;
+}
+
+.success {
+  background: #22c55e;
+}
+
+.warning {
+  background: #f59e0b;
+  color: #111827;
+}
+
+.error {
+  background: #ef4444;
+}
+
+.confirmation {
+  background: #8b5cf6;
+}
+
+.title {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.description {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #6b7280;
+  max-width: 380px;
+}
+
+.buttonGroup {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.button {
+  border: none;
+  border-radius: 9999px;
+  padding: 14px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+}
+
+.confirmButton {
+  color: #ffffff;
+  background: linear-gradient(to right, #9d043c, #f5874f);
+}
+
+.cancelButton {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.cancelButton:hover {
+  background: #e5e7eb;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
