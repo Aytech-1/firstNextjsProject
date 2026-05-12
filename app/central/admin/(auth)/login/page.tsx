@@ -27,7 +27,7 @@ const Login = () => {
                     id="login-btn"
                     text="LOG-IN"
                     type="submit"
-                    onClick={() => router.push("/admin/dashboard")}
+                    onClick={() => router.push("/central/admin/dashboard")}
                 />
                 <p className='w-full text-[12px] text-gray-500 bg-amber-100 p-4 rounded border border-amber-300'>Forgot your password? <span className="text-[12px] text-(--primary-color) cursor-pointer" onClick={() => router.push('/admin/reset-password')}>RESET PASSWORD</span></p>
             </div>
