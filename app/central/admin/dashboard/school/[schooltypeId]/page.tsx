@@ -4,12 +4,14 @@ import styles from "@/styles/component/dashboard.module.css";
 import { schoolTableData } from "@/data/school-table";
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import {
     SquarePlus,
     GitBranchPlus,
     Users
 } from "lucide-react";
 const SchoolPage = () => {
+    const { schooltypeId } = useParams();
     return (
         <div className="w-full flex flex-col">
 
@@ -54,7 +56,6 @@ const SchoolPage = () => {
                 <div className={tableStyles.dashboardWrapperInner}>
 
                     <div className={tableStyles.tableContentDiv}>
-                        {/* Table Header */}
                         <div className={tableStyles.icon}>
                             <span className="text-(--secondary-color)">
                                 <Users size={18} />
@@ -126,7 +127,7 @@ const SchoolPage = () => {
                                                 </span>
                                             </td>
                                             <td className={tableStyles.view}>
-                                                <Link href={`/central/admin/dashboard/schools/${school.schoolId}`}>
+                                                <Link href={`/central/admin/dashboard/schools/${schooltypeId}/${school.schoolId}`}>
                                                     <span>VIEW</span>
                                                 </Link>
                                             </td>

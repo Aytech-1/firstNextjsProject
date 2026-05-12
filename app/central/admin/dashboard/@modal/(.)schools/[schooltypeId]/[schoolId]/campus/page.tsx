@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 const CampusPage = () => {
-    const { schoolId } = useParams();
+    const { schoolId,schooltypeId } = useParams();
     return (
         <div className="relative w-full h-full overflow-hidden">
             <Image
@@ -59,7 +59,7 @@ const CampusPage = () => {
 
                             <div className={styles.addNew}>
                                 <SquarePlus />
-                                <Link href={`/central/admin/dashboard/schools/${schoolId}/campus/addcampus`}>ADD NEW CAMPUS</Link>
+                                <Link href={`/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/campus/addcampus`}>ADD NEW CAMPUS</Link>
 
                             </div>
 
@@ -142,7 +142,7 @@ const CampusPage = () => {
                                                         </span>
                                                     </td>
                                                     <td className={tableStyles.view}>
-                                                        <Link href={`/central/admin/dashboard/schools/${schoolId}/campus/${campus.campusId}`}>
+                                                        <Link href={`/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/campus/${campus.campusId}`}>
                                                             <span>VIEW</span>
                                                         </Link>
                                                     </td>

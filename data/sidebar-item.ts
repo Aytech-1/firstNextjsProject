@@ -21,7 +21,7 @@ export const sidebarItems = [
 
   {
     name: "schools",
-    link: "/central/admin/dashboard/schools",
+    link: "/central/admin/dashboard/schooltype",
     icon: GitBranchPlus,
   },
 

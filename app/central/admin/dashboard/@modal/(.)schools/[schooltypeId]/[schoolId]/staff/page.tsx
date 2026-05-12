@@ -1,20 +1,20 @@
 'use client'
 import tableStyles from "@/styles/component/table.module.css";
-import styles from "@/styles/component/dashboard.module.css";
-import { FacultyTableData } from "@/data/faculty-table";
+import dashboardStyles from "@/styles/component/dashboard.module.css";
+import { adminTableData } from "@/data/table";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import Header from "@/components/layout/campus/header";
-import SideNav from "@/components/layout/campus/side-nav";
+import Header from "@/components/layout/school/header";
+import SideNav from "@/components/layout/school/side-nav";
 import {
     SquarePlus,
-    GitBranchPlus,
+    UserStar,
     Users
 } from "lucide-react";
 
-const FacultyPage = () => {
-    const { schoolId, campusId } = useParams();
+const StaffPage = () => {
+    const { schoolId,schooltypeId } = useParams();
     return (
         <div className="relative w-full h-full overflow-hidden">
             <Image
@@ -27,44 +27,47 @@ const FacultyPage = () => {
             <Header />
             <SideNav />
             <main className="w-[calc(100%-130px)] h-[calc(100%-70px)] absolute right-0 bottom-0 overflow-auto bg-white/50 backdrop-blur-md z-100">
-                <div className="w-full flex flex-col">
+                <div className="w-full flex flex-col ">
 
-                    <div className={styles.dashboardHeader}>
-                        <div className={styles.headerLeft}>
+                    <div className={dashboardStyles.dashboardHeader}>
+                        <div className={dashboardStyles.headerLeft}>
 
-                            <div className={styles.headerIcon}>
-                                <GitBranchPlus />
+                            <div className={dashboardStyles.headerIcon}>
+                                <UserStar />
                             </div>
 
-                            <div className={styles.headerText}>
-                                <h2>Faculty</h2>
+                            <div className={dashboardStyles.headerText}>
+                                <h2>Administrators</h2>
 
                                 <p>
-                                    View and manage all your campuses from one dashboard.
-                                    Keep track of activities,  monitor updates,
-                                    and ensure everything runs smoothly across locations.
+                                    Manage administrator accounts with eas.
+                                    Assign roles, control access,
+                                    and oversee activities to keep operations secure and well-organized.
                                 </p>
                             </div>
 
                         </div>
 
-                        <div className={styles.staffHeader}>
-                            <div className={styles.searchInput}>
-                                <input className={styles.input}
+                        <div className={dashboardStyles.staffHeader}>
+                            <div className={dashboardStyles.searchInput}>
+                                <input className={dashboardStyles.input}
                                     type="text"
-                                    placeholder="Search Faculty here..."
+                                    placeholder="Search Staff here..."
                                 />
 
                             </div>
 
-                            <div className={styles.addNew}>
+                            <div className={dashboardStyles.addNew}>
                                 <SquarePlus />
-                                <Link href={`/central/admin/dashboard/schools/${schoolId}/campus/${campusId}/faculty/addfaculty`}>ADD NEW FACULTY</Link>
+                                <Link href={`/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/staff/addstaff`}>ADD NEW STAFF</Link>
 
                             </div>
 
                         </div>
+
+
                     </div>
+
 
                     <div className={tableStyles.dashboardWrapper}>
                         <div className={tableStyles.dashboardWrapperInner}>
@@ -76,7 +79,7 @@ const FacultyPage = () => {
                                         <Users size={18} />
                                     </span>
 
-                                    <span>Campuses</span>
+                                    <span>Administrators</span>
                                 </div>
 
                                 <div className={tableStyles.tableContentDivInner}>
@@ -93,16 +96,16 @@ const FacultyPage = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {FacultyTableData.map((faculty) => (
-                                                <tr key={faculty.sn}>
+                                            {adminTableData.map((admin) => (
+                                                <tr key={admin.sn}>
 
-                                                    <td>{faculty.sn}</td>
+                                                    <td>{admin.sn}</td>
                                                     <td>
                                                         <div className={tableStyles.profileDiv}>
 
                                                             <div className={tableStyles.imageDiv}>
                                                                 <Image
-                                                                    src={faculty.image}
+                                                                    src={admin.image}
                                                                     alt="avater"
                                                                     width={40}
                                                                     height={40}
@@ -111,38 +114,38 @@ const FacultyPage = () => {
                                                             </div>
 
                                                             <div className={tableStyles.username}>
-                                                                <h3>{faculty.fullName}</h3>
-                                                                <span>{faculty.facultyId}</span>
+                                                                <h3>{admin.fullName}</h3>
+                                                                <span>{admin.staffId}</span>
                                                             </div>
                                                         </div>
                                                     </td>
 
                                                     <td className={tableStyles.info}>
-                                                        <h3>{faculty.email}</h3>
-                                                        <span>{faculty.phone}</span>
+                                                        <h3>{admin.email}</h3>
+                                                        <span>{admin.phone}</span>
                                                     </td>
 
                                                     <td>
-                                                        <span>{faculty.role}</span>
+                                                        <span>{admin.role}</span>
                                                     </td>
                                                     <td>
-                                                        <span>{faculty.lastLogin}</span>
+                                                        <span>{admin.lastLogin}</span>
                                                     </td>
                                                     <td>
                                                         <span
                                                             className={`
-                                                        ${tableStyles.status}
-                                                        ${faculty.status.statusId === "1"
+                                                    ${tableStyles.status}
+                                                    ${admin.status.statusId === "1"
                                                                     ? tableStyles.activeStatus
                                                                     : tableStyles.inactiveStatus
                                                                 }
-                                                    `}
+                                                `}
                                                         >
-                                                            {faculty.status.statusName}
+                                                            {admin.status.statusName}
                                                         </span>
                                                     </td>
                                                     <td className={tableStyles.view}>
-                                                        <Link href={`/central/admin/dashboard/schools/${schoolId}/campus/${campusId}/faculty/${faculty.facultyId}`}>
+                                                        <Link href={`/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/staff/${admin.staffId}`}>
                                                             <span>VIEW</span>
                                                         </Link>
                                                     </td>
@@ -156,10 +159,11 @@ const FacultyPage = () => {
                         </div>
                     </div>
 
+
                 </div >
             </main>
         </div >
     );
 };
 
-export default FacultyPage
+export default StaffPage;
