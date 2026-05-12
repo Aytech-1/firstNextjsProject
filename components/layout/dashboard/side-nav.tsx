@@ -1,22 +1,76 @@
 'use client';
+
 import styles from "@/styles/component/sidebar.module.css";
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from "next/navigation";
 import { sidebarItems } from "@/data/sidebar-item";
 import Link from "next/link";
+import { useModal } from "@/components/ui/modal-provider";
+
 const Sidebar = () => {
     const pathname = usePathname();
+    const router = useRouter();
+    const { showModal } = useModal();
+
+    const handleLogout = () => {
+        showModal({
+            variant: "success",
+            title: "Confirm Logout",
+            description:"Are you sure you want to log out of your account?",
+            showCancelButton: true,
+            cancelText: "No, Stay Logged In",
+            confirmText: "Yes, Logout",
+            onConfirm: () => {
+                // Clear authentication data if needed
+                // localStorage.removeItem("token");
+                // sessionStorage.clear();
+
+                // Redirect to login page
+                router.push("/central/admin/login");
+            },
+        });
+    };
+
     return (
-        <aside className="fixed bottom-0  w-32.5 bg-white z-10 h-[calc(100%-70px)]">
+        <aside className="fixed bottom-0 w-32.5 bg-white z-10 h-[calc(100%-70px)]">
             <ul className="w-full h-full flex flex-col gap-5 items-center justify-start p-5">
                 {sidebarItems.map((item) => {
                     const isActive = pathname === item.link;
+
+                    /* =========================
+                       LOGOUT ITEM (SHOW MODAL)
+                    ========================= */
+                    if (item.name.toLowerCase() === "logout") {
+                        return (
+                            <li key={item.link} className="w-full">
+                                <button
+                                    type="button"
+                                    onClick={handleLogout}
+                                    className={styles.list}
+                                >
+                                    <item.icon size={19} />
+                                    <span className={styles.span}>
+                                        {item.name}
+                                    </span>
+                                </button>
+                            </li>
+                        );
+                    }
+
+                    /* =========================
+                       NORMAL NAVIGATION LINKS
+                    ========================= */
                     return (
                         <li key={item.link} className="w-full">
                             <Link
                                 href={item.link}
-                                className={`${styles.list} ${isActive ? styles.active : ""}`}>
+                                className={`${styles.list} ${
+                                    isActive ? styles.active : ""
+                                }`}
+                            >
                                 <item.icon size={19} />
-                                <span className={`${styles.span}`}>{item.name}</span>
+                                <span className={styles.span}>
+                                    {item.name}
+                                </span>
                             </Link>
                         </li>
                     );

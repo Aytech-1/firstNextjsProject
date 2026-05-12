@@ -54,6 +54,29 @@ export interface ToastContextType {
   showToast: (message: string, type?: ToastType) => void;
 }
 
+export type ModalVariant =
+  | "info"
+  | "success"
+  | "warning"
+  | "error"
+  | "confirmation";
+
+export interface Modal {
+  isOpen: boolean;
+  variant: ModalVariant;
+  title: string;
+  description: string;
+  showCancelButton?: boolean;
+  cancelText?: string;
+  confirmText?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+}
+
+export interface ModalContextType {
+  showModal: (modal: Partial<Modal>) => void;
+  closeModal: () => void;
+}
 
 
 

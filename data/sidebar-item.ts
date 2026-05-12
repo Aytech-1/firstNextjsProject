@@ -21,7 +21,7 @@ export const sidebarItems = [
 
   {
     name: "schools",
-    link: "/central/admin/dashboard/schools",
+    link: "/central/admin/dashboard/schooltype",
     icon: GitBranchPlus,
   },
 
@@ -34,6 +34,12 @@ export const sidebarItems = [
   {
     name: "report",
     link: "/central/admin/dashboard/report",
+    icon: ClipboardMinus,
+  },
+
+  {
+    name: "logout",
+    link: "/central/admin/dashboard/logout",
     icon: ClipboardMinus,
   },
 ];
