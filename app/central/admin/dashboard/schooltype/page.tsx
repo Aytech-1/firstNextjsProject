@@ -62,7 +62,7 @@ const SelectSchoolType = () => {
                                     {option.description}
                                 </p>
                                 <div className="flex items-center text-sm text-blue-600 group-hover:gap-2 transition-all mt-4">
-                                    Continue to {option.title}
+                                    Continue to {option.title} Dashboard
                                     <ArrowRight size={18} className="ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
                                 </div>
                             </div>
