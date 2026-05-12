@@ -10,31 +10,31 @@ import { useParams } from "next/navigation";
 
 export const useSchoolSidebarItems = () => {
   const params = useParams();
-
-  const schoolId = params.schoolId as string;
+  
+  const { schoolId, schooltypeId } = params as { schoolId: string; schooltypeId: string };
 
   return [
     {
       name: "dashboard",
-      link: `/central/admin/dashboard/schools/${schoolId}`,
+      link: `/central/admin/dashboard/schools/${schooltypeId}/${schoolId}`,
       icon: LayoutGrid,
     },
 
      {
       name: "staff",
-      link: `/central/admin/dashboard/schools/${schoolId}/staff`,
+      link: `/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/staff`,
       icon: GitBranchPlus,
     },
 
     {
       name: "campus",
-      link: `/central/admin/dashboard/schools/${schoolId}/campus`,
+      link: `/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/campus`,
       icon: GitBranchPlus,
     },
 
     {
       name: "settings",
-      link: `/central/admin/dashboard/schools/${schoolId}/settings`,
+      link: `/central/admin/dashboard/schools/${schooltypeId}/${schoolId}/settings`,
       icon: Users,
     },
   ];
