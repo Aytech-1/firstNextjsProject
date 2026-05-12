@@ -80,6 +80,8 @@ export interface ModalContextType {
 
 
 
-
-
-
+export type NotificationCardProps = {
+  name: string;
+  message: string;
+  date: string;
+};
