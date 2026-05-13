@@ -64,7 +64,7 @@ export type ModalVariant =
 export interface Modal {
   isOpen: boolean;
   variant: ModalVariant;
-  title: string; 
+  title: string;
   description: string;
   showCancelButton?: boolean;
   cancelText?: string;
