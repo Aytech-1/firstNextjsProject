@@ -20,11 +20,7 @@ const Sidebar = () => {
             cancelText: "No, Stay Logged In",
             confirmText: "Yes, Logout",
             onConfirm: () => {
-                // Clear authentication data if needed
-                // localStorage.removeItem("token");
-                // sessionStorage.clear();
-
-                // Redirect to login page
+                sessionStorage.clear();
                 router.push("/central/admin/login");
             },
         });
@@ -35,10 +31,6 @@ const Sidebar = () => {
             <ul className="w-full h-full flex flex-col gap-5 items-center justify-start p-5">
                 {sidebarItems.map((item) => {
                     const isActive = pathname === item.link;
-
-                    /* =========================
-                       LOGOUT ITEM (SHOW MODAL)
-                    ========================= */
                     if (item.name.toLowerCase() === "logout") {
                         return (
                             <li key={item.link} className="w-full">
@@ -55,10 +47,6 @@ const Sidebar = () => {
                             </li>
                         );
                     }
-
-                    /* =========================
-                       NORMAL NAVIGATION LINKS
-                    ========================= */
                     return (
                         <li key={item.link} className="w-full">
                             <Link
