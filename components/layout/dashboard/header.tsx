@@ -34,7 +34,7 @@ const Header = () => {
                         <Link href={'/central/admin/dashboard/settings'} className="p-3 rounded-tr-lg rounded-bl-lg hover:bg-[rgba(231,230,225,0.6)] duration-300 ease-in-out flex justify-center items-center cursor-pointer">
                             <Settings size={21} className="text-[#7c7c7c] cursor-pointer" />
                         </Link>
-                        <Link href="" className="relative p-3 rounded-tr-lg rounded-bl-lg hover:bg-[rgba(231,230,225,0.6)] duration-300 ease-in-out flex justify-center items-center cursor-pointer">
+                        <Link href="/central/admin/dashboard/notification" className="relative p-3 rounded-tr-lg rounded-bl-lg hover:bg-[rgba(231,230,225,0.6)] duration-300 ease-in-out flex justify-center items-center cursor-pointer">
                             <Bell size={21} className="text-[#7c7c7c] cursor-pointer" />
                             <span className="absolute text-[10px] text-white flex justify-center items-center top-2 right-2 w-3.5 h-3.5 rounded-full bg-red-500">1</span>
                         </Link>
