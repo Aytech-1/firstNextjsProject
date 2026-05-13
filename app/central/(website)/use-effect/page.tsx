@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { WeatherData } from "@/types/user";
-import { api } from "@/types/api";
+
 
 const UseWeather = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -11,7 +11,7 @@ const UseWeather = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const res = await api.get<WeatherData>(
+        const res = await fetch get<WeatherData>(
           "/forecast?latitude=6.52&longitude=3.37&hourly=temperature_2m&forecast_days=1"
           // {
           //   latitude: 6.52,
