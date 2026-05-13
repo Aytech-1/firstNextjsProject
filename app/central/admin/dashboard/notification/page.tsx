@@ -14,44 +14,9 @@ import {
 
 
 import NotificationCard from "@/components/layout/dashboard/notificationcard";
+import { notifications } from "@/data/notification";
+import { link } from "fs";
 
-const notifications = [
-    {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    },
-    {
-        name: "John Doe",
-        message: "Password changed successfully",
-        date: "2023-07-10 10:20:00",
-    },
-    {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    },
-     {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    },
-     {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    },
-    {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    },
-    {
-        name: "Afolabi Taiwo",
-        message: "Success Alert: Profile updated successfully",
-        date: "2023-07-09 15:31:34",
-    }
-];
 
 const SchoolPage = () => {
     const { schooltypeId } = useParams();
@@ -116,8 +81,11 @@ const SchoolPage = () => {
                                 gap: "20px",
                             }}
                         >
+                            
                             {notifications.map((item, index) => (
-                                <NotificationCard key={index} {...item} />
+                                <Link href={`/central/admin/dashboard/notification/${item.alertId}`} key={index}>
+                                    <NotificationCard {...item} />
+                                </Link>
                             ))}
                         </div>
                     </div>
