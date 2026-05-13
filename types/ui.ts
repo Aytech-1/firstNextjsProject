@@ -56,9 +56,9 @@ export interface ToastContextType {
 
 
 
-
 export type NotificationCardProps = {
   name: string;
   message: string;
   date: string;
+  link?: string;
 };
