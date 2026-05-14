@@ -27,7 +27,6 @@ const Settings = () => {
     ];
     return (
     <div className="w-full flex flex-col justify-center-center gap-4">
-
         <div className={`${style.dashboardHeader} w-full`}>
             <div className={style.headerLeft}>
                 <div className={style.headerIcon}>
@@ -54,9 +53,9 @@ const Settings = () => {
                             key={index}
                             href={item.link}
                             className="group relative overflow-hidden flex flex-col gap-4 p-6 rounded-xl border border-slate-100 bg-slate-50/40 transition-all duration-300 cursor-pointer 
-                        w-[32.5%]
-                        hover:bg-white hover:border-blue-400/50"
-                        >
+                            w-[32.5%]
+                            hover:bg-white hover:border-blue-400/50"
+                            >
                             <div className={`absolute -bottom-2 -right-4 opacity-[0.03] text-blue-600 transition-all duration-500 group-hover:opacity-[0.07] group-hover:scale-110 group-hover:-rotate-12`}>
                                 {item.ghostIcon}
                             </div>
