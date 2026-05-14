@@ -51,7 +51,7 @@ const SelectSchoolType = () => {
                         title={`Go to ${option.title} Dashboard`}
                     >
                         <div className="cursor-pointer rounded-2xl border-2 border-black/10 bg-white p-8 transition-all duration-300 flex flex-col items-start gap-4 hover:border-blue-200 hover:shadow-md">
-                            <div className="p-4 rounded-xl font-medium text-(--border-color) bg-blue-50">
+                            <div className="p-4 rounded-tr-2xl rounded-bl-2xl font-medium text-(--border-color) bg-blue-50">
                                 {option.icon}
                             </div>
                             <div>

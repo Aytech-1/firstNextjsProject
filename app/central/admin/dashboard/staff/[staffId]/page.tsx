@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function ViewStaff() {
-    redirect("/admin/dashboard")
+export default function ViewProfile() {
+    redirect("/central/admin/dashboard")
 }
