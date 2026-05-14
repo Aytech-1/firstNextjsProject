@@ -22,7 +22,7 @@ const Rolemanagement = () => {
             description: "Full system access, including financial configurations, school onboarding, and high-level security logs.",
             userCount: 3,
             icon: ShieldCheck,
-            link: "/central/admin/dashboard/rolemanagement/super-admin"
+            link: "/central/admin/dashboard/roleprofile"
         },
         {
             id: 2,
@@ -30,7 +30,7 @@ const Rolemanagement = () => {
             description: "Manages day-to-day operations, member approvals, and cooperative loan workflows without system-level access.",
             userCount: 12,
             icon: ShieldCheck,
-            link: "/central/admin/dashboard/rolemanagement/admin"
+            link: "/central/admin/dashboard/roleprofile"
         },
         {
             id: 3,
@@ -38,7 +38,7 @@ const Rolemanagement = () => {
             description: "Technical support access for managing student portals, database maintenance, and hardware integration.",
             userCount: 5,
             icon: ShieldCheck,
-            link: "/central/admin/dashboard/rolemanagement/ict"
+            link: "/central/admin/dashboard/roleprofile"
         }
     ];
     return (
@@ -83,8 +83,9 @@ const Rolemanagement = () => {
                     <div className="flex flex-wrap gap-3 items-center justify-start">
                         {roleData.map((item) => (
                             <Link
-                                key={item.link}
-                                href={item.link}
+                                key={item.id}
+                                href={`${item.link}/${item.id}`}
+
                                 className="group relative overflow-hidden flex flex-col gap-4 p-6 rounded-xl border border-slate-100 bg-slate-50/40 transition-all duration-300 cursor-pointer 
                             w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)]
                             hover:bg-white hover:border-blue-400/50 hover:shadow-md"

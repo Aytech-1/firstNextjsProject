@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function Role() {
+export default function Roles() {
     redirect("/central/admin/dashboard/rolemanagement")
 }

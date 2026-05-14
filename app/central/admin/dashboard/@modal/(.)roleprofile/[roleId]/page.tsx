@@ -8,7 +8,7 @@ import Textarea from "@/components/ui/textarea";
 import Button from "@/components/ui/button";
 
 
-const AddRoles = () => {
+const RoleProfile = () => {
     const router = useRouter();
 
     const permissionList = [
@@ -56,7 +56,7 @@ const AddRoles = () => {
                 <div className="w-full py-3 flex items-center justify-between border-b border-slate-200">
                     <div className="flex items-center justify-center gap-1">
                         <ShieldCheck className="text-(--border-color)" />
-                        <h2 className="text-[12px] text-slate-700" style={{ fontSize: 'clamp(20px, 4vw, 20px)' }}>Add New Role</h2>
+                        <h2 className="text-[12px] text-slate-700" style={{ fontSize: 'clamp(20px, 4vw, 20px)' }}>Update Role</h2>
                     </div>
                     <button onClick={() => router.back()} className="text-slate-500 shadow-sm bg-slate-200 p-3 rounded-full cursor-pointer hover:text-slate-700 transition-colors duration-300" title="close">
                         <X size={15} />
@@ -66,7 +66,7 @@ const AddRoles = () => {
 
             <div className="w-full px-4 py-3 pb-15 overflow-auto h-[calc(100%-16px)]">
                 <div className={styles.alert}>
-                    Kindly fill the form below and toggle permissions to <span>ADD NEW USER ROLE</span>
+                    Review and update the configurations below to <span>COMMIT CHANGES </span>to this role
                 </div>
 
                 <div className="w-full mt-5 flex flex-col items-center gap-4">
@@ -84,11 +84,11 @@ const AddRoles = () => {
 
                     <div className={styles.group}>
                         <h3 className="text-[14px] text-slate-700 font-bold mb-2">Permissions</h3>
-                        <p className="text-[12px] text-slate-500 mb-4">Control system access by toggling specific permissions below. Assigning these rights carefully helps maintain a secure environment by ensuring users only interact with the data and features relevant to their specific department</p>
+                        <p className="text-[12px] text-slate-500 mb-4">Toggle specific access rights to update what users in this role can see and do. Changes apply globally to all members assigned to this profile.</p>
                         <div className="flex flex-col justify-center items-center gap-3">
                             <div className={`${styles.group} bg-white! px-0!`}>
                                 <div className="w-full px-5 pb-3.75">
-                                    <h3 className="text-[15px] text-slate-500 font-bold">Dashboard Permissions</h3>
+                                    <h3 className="text-[15px] text-slate-500 font-bold">Role Permissions</h3>
                                 </div>
                                 <div className="flex flex-col justify-center items-center">
                                     {permissionList.map((item) => (
@@ -118,7 +118,7 @@ const AddRoles = () => {
                         <div className="flex justify-start w-35 items-start my-2">
                             <Button
                                 id="create-btn"
-                                text="SUBMIT"
+                                text="Update Role"
                                 type="button"
                                 className="bg-black/70! w-2xl!"
                                 rightIcon={<Check size={15} />}
@@ -132,4 +132,4 @@ const AddRoles = () => {
     )
 }
 
-export default AddRoles
+export default RoleProfile
