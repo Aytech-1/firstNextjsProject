@@ -8,6 +8,7 @@ import SelectField from "@/components/ui/select-field";
 import Button from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
 
+
 const AddSchoolPage = () => {
     const router = useRouter();
 
