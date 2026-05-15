@@ -18,17 +18,21 @@ const Login = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
 
-    async function submitLogin() {
+    async function submitLogin(e?: React.FormEvent) {
+        e?.preventDefault();
+
         if (!emailAddress.trim()) {
             showToast("Email Address is Required!", "error");
-            return
+            return;
         }
 
         if (!password.trim()) {
             showToast("Password is Required!", "error");
-            return
+            return;
         }
+
         setLoading(true);
+
         try {
             const response = await fetch(`${BASE_URL}/central/auth/login`, {
                 cache: 'no-store',
@@ -43,6 +47,7 @@ const Login = () => {
             });
 
             const data = await response.json();
+
             if (!response.ok) {
                 showToast(data.message, "error");
                 return;
@@ -53,7 +58,7 @@ const Login = () => {
                     sessionStorage.setItem("accessToken", data.accessToken);
                     showToast(data.message);
                     router.push('/central/admin/dashboard');
-                }else {
+                } else {
                     showToast(data.message);
                     sessionStorage.setItem("emailAddress", emailAddress);
                     router.push('/central/admin/login-otp');
@@ -62,7 +67,7 @@ const Login = () => {
                 showToast(data.message, "error");
             }
 
-        } catch (error) {
+        } catch {
             showToast("An error occurred while logging in.", "error");
         } finally {
             setLoading(false);
@@ -70,7 +75,10 @@ const Login = () => {
     }
 
     return (
-        <div className="w-[80%] flex flex-col gap-5 justify-center items-center mx-auto animate__animated animate__fadeIn">
+        <form
+            onSubmit={submitLogin}
+            className="w-[80%] flex flex-col gap-5 justify-center items-center mx-auto animate__animated animate__fadeIn"
+        >
             <h1 className="text-2xl! text-center">
                 Login To Your Account
             </h1>
@@ -96,22 +104,9 @@ const Login = () => {
                 text={loading ? "AUTHENTICATING" : "LOGIN"}
                 type="submit"
                 disabled={loading}
-                leftIcon={loading ? <Loader className="animate-spin" />  : <CheckCheck /> }
-                onClick={submitLogin}
+                leftIcon={loading ? <Loader className="animate-spin" /> : <CheckCheck />}
             />
-
-            <p className="w-full text-[12px] text-gray-500 bg-amber-100 p-4 rounded border border-amber-300">
-                Forgot your password?{" "}
-                <span
-                    className="text-[12px] text-(--primary-color) cursor-pointer"
-                    onClick={() =>
-                        router.push('/central/admin/reset-password')
-                    }
-                >
-                    RESET PASSWORD
-                </span>
-            </p>
-        </div>
+        </form>
     );
 };
 
