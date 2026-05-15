@@ -20,7 +20,7 @@ const ResetPassword = () => {
                     id="proceed-btn"
                     text="PROCEED"
                     type="submit"
-                    onClick={() => router.push("/admin/password-link")}
+                    onClick={() => router.push("/central/admin/password-link")}
                 />
                 <p className='w-full text-[12px] text-gray-500 bg-(--bg-color) p-4 rounded border border-amber-300'>Already have an account? <span className="text-[12px] text-(--primary-color) cursor-pointer" onClick={() => router.push('/admin/login')}>SIGN-IN</span></p>
             </div>

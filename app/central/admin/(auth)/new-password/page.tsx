@@ -29,7 +29,7 @@ const NewPassword = () => {
                     id="reset-btn"
                     text="RESET PASSWORD"
                     type="submit"
-                    onClick={() => router.push("/admin/login")}
+                    onClick={() => router.push("/central/admin/login")}
                 />
             </div>
         </>

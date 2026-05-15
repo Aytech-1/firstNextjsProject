@@ -14,7 +14,7 @@ const PasswordLink = () => {
                 <Button
                     id="okay-btn"
                     text="OKAY"
-                      onClick={() => router.push('/admin/login')}
+                      onClick={() => router.push('/central/admin/login')}
                 />
 
                 <p>MAIL not recieved? RESEND MAIL</p>
