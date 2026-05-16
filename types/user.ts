@@ -27,7 +27,7 @@ export interface People {
     statusId: number;
     statusName: string;
   };
-   role: {
+  role: {
     roleId: number;
     roleName: string;
   };
