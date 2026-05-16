@@ -12,7 +12,9 @@ export interface TextFieldProps {
   maxLength?: number;
   className?: string;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
   placeholder?: string;
 }
 
