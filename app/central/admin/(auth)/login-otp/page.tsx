@@ -16,8 +16,6 @@ const LoginOtp = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
 
-
-
     async function verifyOtp(code?: string) {
         const otpCode = code ?? otp;
         if (!otpCode.trim()) {
@@ -48,8 +46,10 @@ const LoginOtp = () => {
             }
 
             if (data.success) {
+                sessionStorage.clear();
                 showToast(data.message);
                 sessionStorage.setItem("accessToken", data.accessToken);
+                sessionStorage.setItem("permissions", data.permissions);
                 sessionStorage.removeItem("emailAddress");
                 router.push('/central/admin/dashboard');
             } else {

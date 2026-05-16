@@ -1,8 +1,11 @@
+'use client'
 import Image from "next/image"
 import Link from "next/link"
 import { Settings, Bell } from "lucide-react"
+import { useUser } from "@/app/context/usercontext"
 
 const Header = () => {
+        const { user } = useUser();
     return (
         <header className="w-full h-17.5 flex justify-center items-center bg-(--white-color) fixed top-0">
             <div className="w-[95%] h-full max-w-3000 flex justify-between items-center">
@@ -42,11 +45,11 @@ const Header = () => {
                     <div className="flex items-center gap-2.5 text-[20px] cursor-pointer border-l-2 border-dotted border-gray-300 pl-2.5">
                         <div className="flex flex-col">
                             <span className="text-[13px] text-gray-800">
-                                Adeyemi Ayobami
+                                {user?.firstName} {user?.lastName}
                             </span>
 
                             <span className="text-[10px] text-(--secondary-color)">
-                                SUPER ADMIN
+                                {user?.role?.roleName}
                             </span>
                         </div>
                         <Link href="/central/admin/dashboard/myprofile">
