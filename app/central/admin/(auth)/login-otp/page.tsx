@@ -45,8 +45,10 @@ const LoginOtp = () => {
             }
 
             if (data.success) {
+                sessionStorage.clear();
                 showToast(data.message);
                 sessionStorage.setItem("accessToken", data.accessToken);
+                sessionStorage.setItem("permissions", data.permissions);
                 sessionStorage.removeItem("emailAddress");
                 router.push('/central/admin/dashboard');
             } else {
@@ -67,7 +69,6 @@ const LoginOtp = () => {
                 <InputField
                     id="otp"
                     label="OTP"
-                    type="number"
                     value={otpCode}
                     onChange={(e) => setOtpCode(e.target.value)}
                 />
