@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import ToastProvider from "@/components/ui/toast-provider";
 import ModalProvider from "@/components/ui/modal-provider";
+import { UserProvider } from './context/usercontext';
 
 const bodyFont = Inter({
   subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({
       >
         <ToastProvider>
           <ModalProvider>
-            {children}
+            <UserProvider>
+              {children}
+            </UserProvider>
           </ModalProvider>
         </ToastProvider>
       </body>
