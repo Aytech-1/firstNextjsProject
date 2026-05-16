@@ -3,7 +3,7 @@ import Header from "@/components/layout/dashboard/header";
 import SideNav from "@/components/layout/dashboard/side-nav";
 import Image from "next/image";
 
-const DashboardLayout = ({ children, modal}: LayoutProps) => {
+const DashboardLayout = ({ children, modal }: LayoutProps) => {
   return (
     <>
       <div className=" w-full h-screen">
@@ -19,7 +19,7 @@ const DashboardLayout = ({ children, modal}: LayoutProps) => {
           {children}
         </main>
         {modal}
-        
+
       </div>
 
     </>

@@ -1,13 +1,15 @@
-
+'use client'
 import styles from "@/styles/component/dashboard.module.css";
 import { StatisticCardItem } from "@/data/statistic-card-item"
 import Link from "next/link";
+import { useUser } from "@/app/context/usercontext"
+
 import {
     LayoutDashboard
  } from "lucide-react";
 
 const Dashboard = () => {
-
+    const { user } = useUser();
   return (
 
     <div className="w-full flex flex-col gap-6">
@@ -20,7 +22,7 @@ const Dashboard = () => {
           </div>
 
           <div className={styles.headerText}>
-            <h2>👋 Welcome Back, Adeyemi Ayobami!</h2>
+            <h2>👋 Welcome Back, {user?.firstName} {user?.lastName}!</h2>
 
             <p>
               Welcome to your dashboard, where you can oversee all your
@@ -33,7 +35,7 @@ const Dashboard = () => {
 
         <div className="text-[12px] flex items-center gap-2.5 rounded-lg bg-(--white-color) py-3 px-2.5">
           <span>Last Login Date:</span>
-          <strong>2026-04-30 10:45 AM</strong>
+          <strong>{user?.lastLoginAt}</strong>
         </div>
       </div>
 

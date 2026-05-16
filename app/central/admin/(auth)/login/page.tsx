@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/toast-provider";
 import { Loader, CheckCheck } from "lucide-react";
 import { getDeviceId } from "@/lib/device";
 
+
 const Login = () => {
     const router = useRouter();
     const [emailAddress, setEmailAddress] = useState("");
@@ -54,8 +55,10 @@ const Login = () => {
             }
 
             if (data.success) {
+                sessionStorage.clear(); 
                 if (data.accessToken) {
                     sessionStorage.setItem("accessToken", data.accessToken);
+                    sessionStorage.setItem("permissions", data.permissions);
                     showToast(data.message);
                     router.push('/central/admin/dashboard');
                 } else {
