@@ -6,6 +6,11 @@ export interface People {
   email: string;
   homeAddress: string;
   nin: number;
+  lastLoginAt: string;
+  state: {
+    stateId: number;
+    stateName: string;
+  };
   lga: {
     lgaId: number;
     lgaName: string;
@@ -21,6 +26,10 @@ export interface People {
   status: {
     statusId: number;
     statusName: string;
+  };
+   role: {
+    roleId: number;
+    roleName: string;
   };
 }
 
