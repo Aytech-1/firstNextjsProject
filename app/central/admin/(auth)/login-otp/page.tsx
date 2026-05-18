@@ -9,14 +9,15 @@ import { useState } from "react";
 
 const LoginOtp = () => {
     const router = useRouter();
-    const [otpCode, setOtpCode] = useState("");
+    const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
 
-    async function verifyOtp() {
+    async function verifyOtp(code?: string) {
+        const otpCode = code ?? otp;
         if (!otpCode.trim()) {
             showToast("OTP is Required!", "error");
             return
@@ -69,8 +70,18 @@ const LoginOtp = () => {
                 <InputField
                     id="otp"
                     label="OTP"
-                    value={otpCode}
-                    onChange={(e) => setOtpCode(e.target.value)}
+                    type="text"
+                    value={otp}
+                    maxLength={6}
+                    inputMode="numeric"
+                    disabled={loading}
+                    onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        setOtp(value);
+                        if (value.length === 6) {
+                            verifyOtp(value);
+                        }
+                    }}
                 />
 
                 <Button
@@ -79,7 +90,7 @@ const LoginOtp = () => {
                     type="submit"
                     disabled={loading}
                     leftIcon={loading ? <Loader className="animate-spin" /> : <CheckCheck />}
-                    onClick={verifyOtp}
+                    onClick={() => verifyOtp()}
                 />
             </div>
         </>

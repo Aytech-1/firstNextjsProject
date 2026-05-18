@@ -12,21 +12,23 @@ export interface TextFieldProps {
   maxLength?: number;
   className?: string;
   value?: string;
+  disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode'];
   placeholder?: string;
 }
 
 export interface SelectOption {
   label: string;
-  value: string;
+  value: number;
 }
 
 export interface SelectFieldProps {
   id: string;
   label: string;
   options: SelectOption[];
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: number | null;
+  onChange?: (value: number) => void;
   className?: string;
 }
 
