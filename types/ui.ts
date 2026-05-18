@@ -20,15 +20,15 @@ export interface TextFieldProps {
 
 export interface SelectOption {
   label: string;
-  value: string;
+  value: number;
 }
 
 export interface SelectFieldProps {
   id: string;
   label: string;
   options: SelectOption[];
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: number | null;
+  onChange?: (value: number) => void;
   className?: string;
 }
 
@@ -66,7 +66,7 @@ export type ModalVariant =
 export interface Modal {
   isOpen: boolean;
   variant: ModalVariant;
-  title: string; 
+  title: string;
   description: string;
   showCancelButton?: boolean;
   cancelText?: string;

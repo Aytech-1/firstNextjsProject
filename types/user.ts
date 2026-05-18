@@ -2,8 +2,8 @@ export interface People {
   firstName: string;
   middleName: string;
   lastName: string;
-  phoneNumber: number;
-  email: string;
+  mobileNumber: number;
+  emailAddress: string;
   homeAddress: string;
   nin: number;
   lastLoginAt: string;
