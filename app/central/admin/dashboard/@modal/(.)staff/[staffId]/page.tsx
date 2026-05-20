@@ -7,9 +7,214 @@ import { X, UserCheck } from "lucide-react";
 import InputField from "@/components/ui/text-field";
 import SelectField from "@/components/ui/select-field";
 import Button from "@/components/ui/button";
+import { useParams } from "next/navigation";
+import { GetSelectOptions } from "@/lib/preset-data";
+import { getDeviceId } from "@/lib/device";
+import { useEffect, useState } from "react";
+import { SelectOption } from "@/types/ui";
+import { Staff } from "@/types/user";
 
 const ViewStaffProfile = () => {
     const router = useRouter();
+    const { staffId } = useParams();
+    const [staff, setStaff] = useState<Staff | null>(null);
+
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+    const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
+    const token = typeof window !== "undefined" ? sessionStorage.getItem("accessToken") : "";
+
+
+    const [firstName, setFirstName] = useState("");
+    const [middleName, setMiddleName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [emailAddress, setEmailAddress] = useState("");
+    const [mobileNumber, setMobileNumber] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [homeAddress, setHomeAddress] = useState("");
+
+    const [titleId, setTitleId] = useState<number | null>(null);
+    const [titleOptions, setTitleOptions] = useState<SelectOption[]>([]);
+
+    const [genderId, setGenderId] = useState<number | null>(null);
+    const [genderOptions, setGenderOptions] = useState<SelectOption[]>([]);
+
+    const [countryId, setCountryId] = useState<number | null>(null);
+    const [countryOptions, setCountryOptions] = useState<SelectOption[]>([]);
+
+    const [stateId, setStateId] = useState<number | null>(null);
+    const [stateOptions, setStateOptions] = useState<SelectOption[]>([]);
+
+    const [lgaId, setLgaId] = useState<number | null>(null);
+    const [lgaOptions, setLgaOptions] = useState<SelectOption[]>([]);
+
+    const [roleId, setRoleId] = useState<number | null>(null);
+    const [roleOptions, setRoleOptions] = useState<SelectOption[]>([]);
+
+    const [statusId, setStatusId] = useState<number | null>(null);
+    const [statusOptions, setStatusOptions] = useState<SelectOption[]>([]);
+
+    useEffect(() => {
+        async function fetchStaff() {
+            try {
+                const token =
+                    typeof window !== "undefined"
+                        ? sessionStorage.getItem("accessToken")
+                        : null;
+
+                const response = await fetch(
+                    `${BASE_URL}/central/staff/${staffId}`,
+                    {
+                        cache: "no-store",
+                        method: "GET",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            "x-api-key": APP_KEY,
+                            "x-device-id": getDeviceId(),
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const data = await response.json();
+
+                const staffData = data?.data || null;
+
+                setStaff(staffData);
+
+                setFirstName(staffData?.firstName || "");
+                setMiddleName(staffData?.middleName || "");
+                setLastName(staffData?.lastName || "");
+                setEmailAddress(staffData?.emailAddress || "");
+                setMobileNumber(staffData?.mobileNumber || "");
+                setDateOfBirth(staffData?.dateOfBirth || "");
+                setHomeAddress(staffData?.homeAddress || "");
+
+                setTitleId(staffData?.title?.titleId || null);
+
+                setGenderId(
+                    staffData?.gender?.genderId || null
+                );
+
+                setCountryId(
+                    staffData?.country?.countryId || null
+                );
+
+                setStateId(
+                    staffData?.state?.stateId || null
+                );
+
+                setLgaId(
+                    staffData?.localGovernment?.localGovernmentId || null
+                );
+
+                setRoleId
+                (
+                    staffData?.role?.roleId || null
+                );
+
+                setStatusId(
+                    staffData?.status?.statusId || null
+                );
+            } catch (error) {
+                console.error("Fetch Staff Error:", error);
+            }
+        }
+
+        if (staffId) {
+            fetchStaff();
+        }
+    }, [staffId]);
+
+
+    useEffect(() => {
+        async function loadOptions() {
+            try {
+                const [
+                    titles,
+                    genders,
+                    countries,
+                    roles,
+                    statuses
+                ] = await Promise.all([
+                    GetSelectOptions(
+                        "/setup/titles",
+                        "titleName",
+                        "titleId"
+                    ),
+
+                    GetSelectOptions(
+                        "/setup/genders",
+                        "genderName",
+                        "genderId"
+                    ),
+
+                    GetSelectOptions(
+                        "/setup/countries",
+                        "countryName",
+                        "countryId"
+                    ),
+
+                    GetSelectOptions(
+                        "/central/role",
+                        "roleName",
+                        "roleId"
+                    ),
+
+                    GetSelectOptions(
+                        "/setup/statuses?statusId[]=1&statusId[]=2",
+                        "statusName",
+                        "statusId"
+                    )
+                ]);
+
+                setTitleOptions(titles);
+                setGenderOptions(genders);
+                setCountryOptions(countries);
+                setRoleOptions(roles);
+                setStatusOptions(statuses);
+
+                if (countryId) {
+                    const states = await GetSelectOptions(
+                        `/setup/states?countryId=${countryId}`,
+                        "stateName",
+                        "stateId"
+                    );
+
+                    setStateOptions(states);
+                }
+
+                if (stateId) {
+                    const lgas = await GetSelectOptions(
+                        `/setup/lga?stateId=${stateId}`,
+                        "localGovernmentName",
+                        "localGovernmentId"
+                    );
+
+                    setLgaOptions(lgas);
+                }
+            } catch (error) {
+                console.error("Load Options Error:", error);
+            }
+        }
+         
+
+        loadOptions();
+    }, [countryId, stateId]);
+     console.log("Staff Data:", staff);
+
+  
+    
+    const handleCountryChange = (value: number | null) => {
+        setCountryId(value);
+        setStateId(null);
+        setLgaId(null);
+    };
+
+    const handleStateChange = (value: number | null) => {
+        setStateId(value);
+        setLgaId(null);
+    }
 
     return (
         <div className={styles.container} >
@@ -19,7 +224,7 @@ const ViewStaffProfile = () => {
                         <div className="text-(--secondary-color)">
                             <UserCheck size={16} />
                         </div>
-                        
+
                         <span>STAFF PROFILE</span>
                     </div>
 
@@ -43,13 +248,13 @@ const ViewStaffProfile = () => {
                         </div>
 
                         <div className={styles.text}>
-                            <h2>MR ADEYEMI AYOBAMI SAMSON</h2>
+                            <h2>{staff?.title?.titleName} {staff?.firstName} {staff?.middleName} {staff?.lastName}</h2>
                             <div className={styles.meta}>
                                 <span className={`${styles.status} ${styles.active}`}>
                                     Status
                                 </span>
                                 <span>| LAST LOGIN</span>
-                                <strong>2026-04-30</strong>
+                                <strong>{staff?.lastLoginAt || "N/A"}</strong>
                             </div>
                         </div>
 
@@ -67,7 +272,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="title"
                                         label="Select Title"
-                                        options={[]}
+                                        options={titleOptions}
+                                        value={titleId}
+                                        onChange={setTitleId}
                                     />
                                 </div>
 
@@ -75,6 +282,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="firstName"
                                         label="First Name"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
                                     />
                                 </div>
 
@@ -82,6 +291,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="middleName"
                                         label="Middle Name"
+                                        value={middleName}
+                                        onChange={(e) => setMiddleName(e.target.value)}
                                     />
                                 </div>
 
@@ -89,6 +300,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="lastName"
                                         label="Last Name"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
                                     />
                                 </div>
 
@@ -96,7 +309,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="gender"
                                         label="Select Gender"
-                                        options={[]}
+                                        options={genderOptions}
+                                        value={genderId}
+                                        onChange={setGenderId}
                                     />
                                 </div>
 
@@ -104,6 +319,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="phone"
                                         label="Phone Number"
+                                        value={mobileNumber}
+                                        onChange={(e) => setMobileNumber(e.target.value)}
                                     />
                                 </div>
 
@@ -112,6 +329,8 @@ const ViewStaffProfile = () => {
                                         id="email"
                                         label="Email Address"
                                         type="email"
+                                        value={emailAddress}
+                                        onChange={(e) => setEmailAddress(e.target.value)}
                                     />
                                 </div>
 
@@ -120,6 +339,8 @@ const ViewStaffProfile = () => {
                                         id="dob"
                                         label="Date Of Birth"
                                         type="date"
+                                        value={dateOfBirth}
+                                        onChange={(e) => setDateOfBirth(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -130,23 +351,32 @@ const ViewStaffProfile = () => {
 
                             <div className={styles.fieldGroup}>
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="country"
-                                        label="Country"
+                                        label="Select Country"
+                                        options={countryOptions}
+                                        value={countryId}
+                                        onChange={handleCountryChange}
                                     />
                                 </div>
 
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="state"
-                                        label="State"
+                                        label="Select State"
+                                        options={stateOptions}
+                                        value={stateId}
+                                        onChange={handleStateChange}
                                     />
                                 </div>
 
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="lga"
-                                        label="Local Govenment Area"
+                                        label="Select Local Government Area"
+                                        options={lgaOptions}
+                                        value={lgaId}
+                                        onChange={setLgaId}
                                     />
                                 </div>
 
@@ -154,6 +384,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="address"
                                         label="Home Address"
+                                        value={homeAddress}
+                                        onChange={(e) => setHomeAddress(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -167,6 +399,7 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="staffId"
                                         label="Staff ID"
+                                        value={staff?.staffId || ""}
                                         readOnly
                                     />
                                 </div>
@@ -175,8 +408,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="createdTime"
                                         label="Created Time"
+                                        value={staff?.createdAt || ""}
                                         readOnly
-                                        type="date"
                                     />
                                 </div>
 
@@ -184,8 +417,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="lastLogin"
                                         label="Last Login"
+                                        value={staff?.lastLoginAt || ""}
                                         readOnly
-                                        type="date"
                                     />
                                 </div>
                             </div>
@@ -199,7 +432,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="role"
                                         label="Select Role"
-                                        options={[]}
+                                        options={roleOptions}
+                                        value={roleId}
+                                        onChange={setRoleId}
                                     />
                                 </div>
 
@@ -207,7 +442,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="status"
                                         label="Select Status"
-                                        options={[]}
+                                        options={statusOptions}
+                                        value={statusId}
+                                        onChange={setStatusId}
                                     />
                                 </div>
                             </div>

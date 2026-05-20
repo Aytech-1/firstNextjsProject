@@ -7,11 +7,11 @@ import React, {
     useState,
 } from "react";
 import { getDeviceId } from "@/lib/device";
-import { People } from "@/types/user";
+import { Staff } from "@/types/user";
 
 interface UserContextType {
-    user: People | null;
-    setUser: React.Dispatch<React.SetStateAction<People | null>>;
+    user: Staff | null;
+    setUser: React.Dispatch<React.SetStateAction<Staff | null>>;
     refreshUser: () => Promise<void>;
 }
 
@@ -25,7 +25,7 @@ export function UserProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [user, setUser] = useState<People | null>(null);
+    const [user, setUser] = useState<Staff | null>(null);
 
     const refreshUser = async () => {
         try {
