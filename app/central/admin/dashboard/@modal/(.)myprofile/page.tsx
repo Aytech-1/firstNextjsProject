@@ -7,9 +7,95 @@ import { X, UserCheck } from "lucide-react";
 import InputField from "@/components/ui/text-field";
 import SelectField from "@/components/ui/select-field";
 import Button from "@/components/ui/button";
+import { useState, useEffect } from "react";
+import { GetSelectOptions } from "@/lib/preset-data";
+import { SelectOption } from "@/types/ui";
+import { useUser } from "@/app/context/usercontext"
 
 const ViewStaffProfile = () => {
     const router = useRouter();
+    const { user } = useUser();
+
+    const [firstName, setFirstName] = useState("");
+    const [middleName, setMiddleName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [emailAddress, setEmailAddress] = useState("");
+    const [mobileNumber, setMobileNumber] = useState("");
+    const [dateOfBirth, setDateOfBirth] = useState("");
+
+    const [titleId, setTitleId] = useState<number | null>(null);
+    const [titleOptions, setTitleOptions] = useState<SelectOption[]>([]);
+
+    const [genderId, setGenderId] = useState<number | null>(null);
+    const [genderOptions, setGenderOptions] = useState<SelectOption[]>([]);
+
+    const [countryId, setCountryId] = useState<number | null>(null);
+    const [countryOptions, setCountryOptions] = useState<SelectOption[]>([]);
+
+    const [stateId, setStateId] = useState<number | null>(null);
+    const [stateOptions, setStateOptions] = useState<SelectOption[]>([]);
+
+    const [lgaId, setLgaId] = useState<number | null>(null);
+    const [lgaOptions, setLgaOptions] = useState<SelectOption[]>([]);
+
+
+    useEffect(() => {
+        async function loadOptions() {
+            const [
+                titles,
+                genders,
+                countries,
+                states,
+                lgas,
+            ] = await Promise.all([
+                GetSelectOptions("/setup/titles", "titleName", "titleId"),
+                GetSelectOptions("/setup/genders", "genderName", "genderId"),
+                GetSelectOptions(
+                    "/setup/countries",
+                    "countryName",
+                    "countryId"
+                ),
+                GetSelectOptions(
+                    countryId ? `/setup/states?countryId=${countryId}` : "",
+                    "stateName",
+                    "stateId",
+                ),
+                GetSelectOptions(
+                    stateId ? `/setup/lga?stateId=${stateId}` : "",
+                    "localGovernmentName",
+                    "localGovernmentId"
+                ),
+            ]);
+
+            setTitleOptions(titles);
+            setGenderOptions(genders);
+            setCountryOptions(countries);
+            setStateOptions(states);
+            setLgaOptions(lgas);
+        }
+
+        setFirstName(user?.firstName || "");
+        setMiddleName(user?.middleName || "");
+        setLastName(user?.lastName || "");
+        setEmailAddress(user?.emailAddress || "");
+        setMobileNumber(user?.mobileNumber || "");
+        setDateOfBirth(user?.dateOfBirth || "");
+        setTitleId(user?.title.titleId || null);
+        setGenderId(user?.gender.genderId || null);
+
+        loadOptions();
+    }, [countryId, stateId]);
+
+    const handleCountryChange = (value: number | null) => {
+        setCountryId(value);
+        setStateId(null);
+        setLgaId(null);
+    };
+
+    const handleStateChange = (value: number | null) => {
+        setStateId(value);
+        setLgaId(null);
+    }
 
     return (
         <div className={styles.container} >
@@ -19,7 +105,7 @@ const ViewStaffProfile = () => {
                         <div className="text-(--secondary-color)">
                             <UserCheck size={16} />
                         </div>
-                        
+
                         <span>STAFF PROFILE</span>
                     </div>
 
@@ -43,13 +129,13 @@ const ViewStaffProfile = () => {
                         </div>
 
                         <div className={styles.text}>
-                            <h2>MR ADEYEMI AYOBAMI SAMSON</h2>
+                            <h2>{user?.title.titleName} {user?.firstName} {user?.middleName} {user?.lastName}</h2>
                             <div className={styles.meta}>
                                 <span className={`${styles.status} ${styles.active}`}>
                                     Status
                                 </span>
                                 <span>| LAST LOGIN</span>
-                                <strong>2026-04-30</strong>
+                                <strong>{user?.lastLoginAt}</strong>
                             </div>
                         </div>
 
@@ -67,7 +153,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="title"
                                         label="Select Title"
-                                        options={[]}
+                                        options={titleOptions}
+                                        value={titleId}
+                                        onChange={setTitleId}
                                     />
                                 </div>
 
@@ -75,6 +163,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="firstName"
                                         label="First Name"
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
                                     />
                                 </div>
 
@@ -82,6 +172,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="middleName"
                                         label="Middle Name"
+                                        value={middleName}
+                                        onChange={(e) => setMiddleName(e.target.value)}
                                     />
                                 </div>
 
@@ -89,6 +181,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="lastName"
                                         label="Last Name"
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
                                     />
                                 </div>
 
@@ -96,7 +190,9 @@ const ViewStaffProfile = () => {
                                     <SelectField
                                         id="gender"
                                         label="Select Gender"
-                                        options={[]}
+                                        options={genderOptions}
+                                        value={genderId}
+                                        onChange={setGenderId}
                                     />
                                 </div>
 
@@ -104,6 +200,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="phone"
                                         label="Phone Number"
+                                        value={mobileNumber}
+                                        onChange={(e) => setMobileNumber(e.target.value)}
                                     />
                                 </div>
 
@@ -112,6 +210,8 @@ const ViewStaffProfile = () => {
                                         id="email"
                                         label="Email Address"
                                         type="email"
+                                        value={emailAddress}
+                                        onChange={(e) => setEmailAddress(e.target.value)}
                                     />
                                 </div>
 
@@ -119,7 +219,8 @@ const ViewStaffProfile = () => {
                                     <InputField
                                         id="dob"
                                         label="Date Of Birth"
-                                        type="date"
+                                        value={dateOfBirth}
+                                        onChange={(e) => {setDateOfBirth(e.target.value)}}
                                     />
                                 </div>
                             </div>
@@ -130,16 +231,47 @@ const ViewStaffProfile = () => {
 
                             <div className={styles.fieldGroup}>
                                 <div className={styles.half}>
-                                    <InputField
+                                    <SelectField
                                         id="country"
-                                        label="Country"
+                                        label="Select Country"
+                                        options={countryOptions}
+                                        value={countryId}
+                                        onChange={handleCountryChange}
                                     />
                                 </div>
 
                                 <div className={styles.half}>
+                                    <SelectField
+                                        id="state"
+                                        label="Select State"
+                                        options={stateOptions}
+                                        value={stateId}
+                                        onChange={handleStateChange}
+                                    />
+                                </div>
+
+                                <div className={styles.half}>
+                                    <SelectField
+                                        id="lga"
+                                        label="Select Local Government Area"
+                                        options={lgaOptions}
+                                        value={lgaId}
+                                        onChange={setLgaId}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.section}>
+                            <h3 className={styles.sectionTitle}>STAFF ACCOUNT INFORMATION</h3>
+
+                            <div className={styles.fieldGroup}>
+                                <div className={styles.third}>
                                     <InputField
                                         id="state"
                                         label="State"
+                                    // value={user?.state || ""}
+                                    // onChange={(e) => setUser(userData ? { ...userData, state: e.target.value } : null)}
                                     />
                                 </div>
 
@@ -168,6 +300,7 @@ const ViewStaffProfile = () => {
                                         id="staffId"
                                         label="Staff ID"
                                         readOnly
+                                        value={user?.staffId}
                                     />
                                 </div>
 
@@ -176,7 +309,7 @@ const ViewStaffProfile = () => {
                                         id="createdTime"
                                         label="Created Time"
                                         readOnly
-                                        type="date"
+                                        value={user?.createdAt}
                                     />
                                 </div>
 
@@ -185,7 +318,7 @@ const ViewStaffProfile = () => {
                                         id="lastLogin"
                                         label="Last Login"
                                         readOnly
-                                        type="date"
+                                        value={user?.lastLoginAt}
                                     />
                                 </div>
                             </div>
@@ -200,6 +333,8 @@ const ViewStaffProfile = () => {
                                         id="role"
                                         label="Role"
                                         readOnly
+                                        value={user?.role?.roleName}
+                                        className="pointer-events-none"
                                     />
                                 </div>
 
@@ -208,6 +343,7 @@ const ViewStaffProfile = () => {
                                         id="status"
                                         label="Status"
                                         readOnly
+                                        value={user?.status?.statusName}
                                     />
                                 </div>
                             </div>

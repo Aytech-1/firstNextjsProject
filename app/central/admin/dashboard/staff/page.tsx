@@ -214,7 +214,6 @@ const [staff, setStaff] = useState<Staff[]>([]);
         };
 
         fetchStaff();
-
     }, []);
 
     return (

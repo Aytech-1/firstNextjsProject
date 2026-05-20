@@ -25,7 +25,7 @@ export async function GetPresetData(endpoint: string) {
 export async function GetSelectOptions(
     endpoint: string,
     labelKey: string,
-    valueKey: string
+    valueKey: string,
 ) {
     const data = await GetPresetData(endpoint);
 
@@ -33,4 +33,4 @@ export async function GetSelectOptions(
         label: item[labelKey],
         value: item[valueKey],
     }));
-}
+} 

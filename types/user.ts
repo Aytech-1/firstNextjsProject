@@ -2,11 +2,13 @@ export interface People {
   firstName: string;
   middleName: string;
   lastName: string;
-  mobileNumber: number;
+  mobileNumber: string;
   emailAddress: string;
+  dateOfBirth: string;
   homeAddress: string;
   nin: number;
   lastLoginAt: string;
+  createdAt: string;
   state: {
     stateId: number;
     stateName: string;
@@ -27,10 +29,6 @@ export interface People {
     statusId: number;
     statusName: string;
   };
-   role: {
-    roleId: number;
-    roleName: string;
-  };
 }
 
 export type WeatherData = {
@@ -46,4 +44,8 @@ export interface User extends People {
 
 export interface Staff extends People {
   staffId: string;
+  role: {
+    roleId: number;
+    roleName: string;
+  };
 }
