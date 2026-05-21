@@ -24,7 +24,7 @@ export function sidebarItems(){
       name: "staff",
       link: "/central/admin/dashboard/staff",
       icon: Users,
-      show: hasPermission("manage staff"),
+      show: true,
     },
     {
       name: "schools",
