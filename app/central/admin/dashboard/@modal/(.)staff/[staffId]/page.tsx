@@ -13,16 +13,16 @@ import { getDeviceId } from "@/lib/device";
 import { useEffect, useState } from "react";
 import { SelectOption } from "@/types/ui";
 import { Staff } from "@/types/user";
+import { Loader } from "lucide-react";
 
 const ViewStaffProfile = () => {
+    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+    const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
+    const token = typeof window !== "undefined" ? sessionStorage.getItem("accessToken") : null;
     const router = useRouter();
     const { staffId } = useParams();
     const [staff, setStaff] = useState<Staff | null>(null);
-
-    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-    const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
-    const token = typeof window !== "undefined" ? sessionStorage.getItem("accessToken") : "";
-
+    const [loading, setLoading] = useState(false);
 
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
@@ -54,16 +54,19 @@ const ViewStaffProfile = () => {
     const [statusOptions, setStatusOptions] = useState<SelectOption[]>([]);
 
     useEffect(() => {
-        async function fetchStaff() {
+        async function fetchAll() {
             try {
-                const token =
-                    typeof window !== "undefined"
-                        ? sessionStorage.getItem("accessToken")
-                        : null;
-
-                const response = await fetch(
-                    `${BASE_URL}/central/staff/${staffId}`,
-                    {
+                setLoading(true);
+                
+                const [
+                    staffRes,
+                    titles,
+                    genders,
+                    countries,
+                    roles,
+                    statuses,
+                ] = await Promise.all([
+                    fetch(`${BASE_URL}/central/staff/${staffId}`, {
                         cache: "no-store",
                         method: "GET",
                         headers: {
@@ -73,11 +76,19 @@ const ViewStaffProfile = () => {
                             "x-device-id": getDeviceId(),
                             Authorization: `Bearer ${token}`,
                         },
-                    }
-                );
+                    }),
+                    GetSelectOptions("/setup/titles", "titleName", "titleId"),
+                    GetSelectOptions("/setup/genders", "genderName", "genderId"),
+                    GetSelectOptions("/setup/countries", "countryName", "countryId"),
+                    GetSelectOptions("/central/role", "roleName", "roleId"),
+                    GetSelectOptions(
+                        "/setup/statuses?statusId[]=1&statusId[]=2",
+                        "statusName",
+                        "statusId"
+                    ),
+                ]);
 
-                const data = await response.json();
-
+                const data = await staffRes.json();
                 const staffData = data?.data || null;
 
                 setStaff(staffData);
@@ -91,82 +102,12 @@ const ViewStaffProfile = () => {
                 setHomeAddress(staffData?.homeAddress || "");
 
                 setTitleId(staffData?.title?.titleId || null);
-
-                setGenderId(
-                    staffData?.gender?.genderId || null
-                );
-
-                setCountryId(
-                    staffData?.country?.countryId || null
-                );
-
-                setStateId(
-                    staffData?.state?.stateId || null
-                );
-
-                setLgaId(
-                    staffData?.localGovernment?.localGovernmentId || null
-                );
-
-                setRoleId
-                (
-                    staffData?.role?.roleId || null
-                );
-
-                setStatusId(
-                    staffData?.status?.statusId || null
-                );
-            } catch (error) {
-                console.error("Fetch Staff Error:", error);
-            }
-        }
-
-        if (staffId) {
-            fetchStaff();
-        }
-    }, [staffId]);
-
-
-    useEffect(() => {
-        async function loadOptions() {
-            try {
-                const [
-                    titles,
-                    genders,
-                    countries,
-                    roles,
-                    statuses
-                ] = await Promise.all([
-                    GetSelectOptions(
-                        "/setup/titles",
-                        "titleName",
-                        "titleId"
-                    ),
-
-                    GetSelectOptions(
-                        "/setup/genders",
-                        "genderName",
-                        "genderId"
-                    ),
-
-                    GetSelectOptions(
-                        "/setup/countries",
-                        "countryName",
-                        "countryId"
-                    ),
-
-                    GetSelectOptions(
-                        "/central/role",
-                        "roleName",
-                        "roleId"
-                    ),
-
-                    GetSelectOptions(
-                        "/setup/statuses?statusId[]=1&statusId[]=2",
-                        "statusName",
-                        "statusId"
-                    )
-                ]);
+                setGenderId(staffData?.gender?.genderId || null);
+                setCountryId(staffData?.location?.countryId || null);
+                setStateId(staffData?.location?.stateId || null);
+                setLgaId(staffData?.location?.lgaId || null);
+                setRoleId(staffData?.role?.roleId || null);
+                setStatusId(staffData?.status?.statusId || null);
 
                 setTitleOptions(titles);
                 setGenderOptions(genders);
@@ -174,50 +115,85 @@ const ViewStaffProfile = () => {
                 setRoleOptions(roles);
                 setStatusOptions(statuses);
 
-                if (countryId) {
+                const fetchedCountryId = staffData?.location?.countryId;
+                const fetchedStateId = staffData?.location?.stateId;
+
+                if (fetchedCountryId && fetchedStateId) {
+                    const [states, lgas] = await Promise.all([
+                        GetSelectOptions(
+                            `/setup/states?countryId=${fetchedCountryId}`,
+                            "stateName",
+                            "stateId"
+                        ),
+                        GetSelectOptions(
+                            `/setup/lga?stateId=${fetchedStateId}`,
+                            "localGovernmentName",
+                            "localGovernmentId"
+                        ),
+                    ]);
+
+                    setStateOptions(states);
+                    setLgaOptions(lgas);
+                } else if (fetchedCountryId) {
                     const states = await GetSelectOptions(
-                        `/setup/states?countryId=${countryId}`,
+                        `/setup/states?countryId=${fetchedCountryId}`,
                         "stateName",
                         "stateId"
                     );
 
                     setStateOptions(states);
                 }
-
-                if (stateId) {
-                    const lgas = await GetSelectOptions(
-                        `/setup/lga?stateId=${stateId}`,
-                        "localGovernmentName",
-                        "localGovernmentId"
-                    );
-
-                    setLgaOptions(lgas);
-                }
-            } catch (error) {
-                console.error("Load Options Error:", error);
+            } catch {
+            } finally {
+                setLoading(false);
             }
         }
-         
 
-        loadOptions();
-    }, [countryId, stateId]);
-     console.log("Staff Data:", staff);
+        if (staffId) {
+            fetchAll();
+        }
+    }, [staffId]);
 
-  
-    
-    const handleCountryChange = (value: number | null) => {
+    const handleCountryChange = async (value: number | null) => {
         setCountryId(value);
         setStateId(null);
         setLgaId(null);
+        setStateOptions([]);
+        setLgaOptions([]);
+
+        if (value) {
+            try {
+                const states = await GetSelectOptions(
+                    `/setup/states?countryId=${value}`,
+                    "stateName",
+                    "stateId"
+                );
+                setStateOptions(states);
+            } catch (error) {
+            }
+        }
     };
 
-    const handleStateChange = (value: number | null) => {
+    const handleStateChange = async (value: number | null) => {
         setStateId(value);
         setLgaId(null);
-    }
+        setLgaOptions([]);
+
+        if (value) {
+            try {
+                const lgas = await GetSelectOptions(
+                    `/setup/lga?stateId=${value}`,
+                    "localGovernmentName",
+                    "localGovernmentId"
+                );
+                setLgaOptions(lgas);
+            } catch (error) {
+            }
+        }
+    };
 
     return (
-        <div className={styles.container} >
+        <div className={styles.container}>
             <div className={styles.header}>
                 <div className={styles.headerInner}>
                     <div className={styles.headerLeft}>
@@ -234,234 +210,242 @@ const ViewStaffProfile = () => {
                 </div>
             </div>
 
-            <div className={styles.body}>
-                <div className={styles.topSection}>
-                    <div className={styles.topInner}>
-
-                        <div className={styles.image}>
-                            <Image
-                                src="/all-images/image-pix/avatar.jpg"
-                                alt="profile"
-                                width={70}
-                                height={70}
-                            />
-                        </div>
-
-                        <div className={styles.text}>
-                            <h2>{staff?.title?.titleName} {staff?.firstName} {staff?.middleName} {staff?.lastName}</h2>
-                            <div className={styles.meta}>
-                                <span className={`${styles.status} ${styles.active}`}>
-                                    Status
-                                </span>
-                                <span>| LAST LOGIN</span>
-                                <strong>{staff?.lastLoginAt || "N/A"}</strong>
-                            </div>
-                        </div>
-
+            {
+                loading ? (
+                    <div className="w-full h-50 flex justify-center items-center">
+                        <Loader className="animate-spin" /> Loading staff profile...
                     </div>
-                </div>
-
-                <div className={styles.formWrapper}>
-                    <div className={styles.formInner}>
-
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>STAFF BASIC INFORMATION</h3>
-
-                            <div className={styles.fieldGroup}>
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="title"
-                                        label="Select Title"
-                                        options={titleOptions}
-                                        value={titleId}
-                                        onChange={setTitleId}
+                ) : (
+                    <div className={styles.body}>
+                        <div className={styles.topSection}>
+                            <div className={styles.topInner}>
+                                <div className={styles.image}>
+                                    <Image
+                                        src="/all-images/image-pix/avatar.jpg"
+                                        alt="profile"
+                                        width={70}
+                                        height={70}
                                     />
                                 </div>
 
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="firstName"
-                                        label="First Name"
-                                        value={firstName}
-                                        onChange={(e) => setFirstName(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="middleName"
-                                        label="Middle Name"
-                                        value={middleName}
-                                        onChange={(e) => setMiddleName(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="lastName"
-                                        label="Last Name"
-                                        value={lastName}
-                                        onChange={(e) => setLastName(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="gender"
-                                        label="Select Gender"
-                                        options={genderOptions}
-                                        value={genderId}
-                                        onChange={setGenderId}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="phone"
-                                        label="Phone Number"
-                                        value={mobileNumber}
-                                        onChange={(e) => setMobileNumber(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="email"
-                                        label="Email Address"
-                                        type="email"
-                                        value={emailAddress}
-                                        onChange={(e) => setEmailAddress(e.target.value)}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="dob"
-                                        label="Date Of Birth"
-                                        type="date"
-                                        value={dateOfBirth}
-                                        onChange={(e) => setDateOfBirth(e.target.value)}
-                                    />
+                                <div className={styles.text}>
+                                    <h2>
+                                        {staff?.title?.titleName} {staff?.firstName}{" "}
+                                        {staff?.middleName} {staff?.lastName}
+                                    </h2>
+                                    <div className={styles.meta}>
+                                        <span className={`${styles.status} ${styles.active}`}>
+                                            Status
+                                        </span>
+                                        <span>| LAST LOGIN</span>
+                                        <strong>{staff?.lastLoginAt || "N/A"}</strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>STAFF RESIDENT INFORMATION</h3>
+                        <div className={styles.formWrapper}>
+                            <div className={styles.formInner}>
 
-                            <div className={styles.fieldGroup}>
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="country"
-                                        label="Select Country"
-                                        options={countryOptions}
-                                        value={countryId}
-                                        onChange={handleCountryChange}
+                                <div className={styles.section}>
+                                    <h3 className={styles.sectionTitle}>STAFF BASIC INFORMATION</h3>
+
+                                    <div className={styles.fieldGroup}>
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="title"
+                                                label="Select Title"
+                                                options={titleOptions}
+                                                value={titleId}
+                                                onChange={setTitleId}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="firstName"
+                                                label="First Name"
+                                                value={firstName}
+                                                onChange={(e) => setFirstName(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="middleName"
+                                                label="Middle Name"
+                                                value={middleName}
+                                                onChange={(e) => setMiddleName(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="lastName"
+                                                label="Last Name"
+                                                value={lastName}
+                                                onChange={(e) => setLastName(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="gender"
+                                                label="Select Gender"
+                                                options={genderOptions}
+                                                value={genderId}
+                                                onChange={setGenderId}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="phone"
+                                                label="Phone Number"
+                                                value={mobileNumber}
+                                                onChange={(e) => setMobileNumber(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="email"
+                                                label="Email Address"
+                                                type="email"
+                                                value={emailAddress}
+                                                onChange={(e) => setEmailAddress(e.target.value)}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="dob"
+                                                label="Date Of Birth"
+                                                type="date"
+                                                value={dateOfBirth}
+                                                onChange={(e) => setDateOfBirth(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.section}>
+                                    <h3 className={styles.sectionTitle}>STAFF RESIDENT INFORMATION</h3>
+
+                                    <div className={styles.fieldGroup}>
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="country"
+                                                label="Select Country"
+                                                options={countryOptions}
+                                                value={countryId}
+                                                onChange={handleCountryChange}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="state"
+                                                label="Select State"
+                                                options={stateOptions}
+                                                value={stateId}
+                                                onChange={handleStateChange}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="lga"
+                                                label="Select Local Government Area"
+                                                options={lgaOptions}
+                                                value={lgaId}
+                                                onChange={setLgaId}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <InputField
+                                                id="address"
+                                                label="Home Address"
+                                                value={homeAddress}
+                                                onChange={(e) => setHomeAddress(e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.section}>
+                                    <h3 className={styles.sectionTitle}>STAFF ACCOUNT INFORMATION</h3>
+
+                                    <div className={styles.fieldGroup}>
+                                        <div className={styles.third}>
+                                            <InputField
+                                                id="staffId"
+                                                label="Staff ID"
+                                                value={staff?.staffId || ""}
+                                                readOnly
+                                            />
+                                        </div>
+
+                                        <div className={styles.third}>
+                                            <InputField
+                                                id="createdTime"
+                                                label="Created Time"
+                                                value={staff?.createdAt || ""}
+                                                readOnly
+                                            />
+                                        </div>
+
+                                        <div className={styles.third}>
+                                            <InputField
+                                                id="lastLogin"
+                                                label="Last Login"
+                                                value={staff?.lastLoginAt || ""}
+                                                readOnly
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.section}>
+                                    <h3 className={styles.sectionTitle}>ADMINISTRATIVE INFORMATION</h3>
+
+                                    <div className={styles.fieldGroup}>
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="role"
+                                                label="Select Role"
+                                                options={roleOptions}
+                                                value={roleId}
+                                                onChange={setRoleId}
+                                            />
+                                        </div>
+
+                                        <div className={styles.half}>
+                                            <SelectField
+                                                id="status"
+                                                label="Select Status"
+                                                options={statusOptions}
+                                                value={statusId}
+                                                onChange={setStatusId}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="max-w-50 flex justify-end items-end">
+                                    <Button
+                                        id="update-btn"
+                                        text="UPDATE PROFILE"
+                                        type="button"
                                     />
                                 </div>
 
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="state"
-                                        label="Select State"
-                                        options={stateOptions}
-                                        value={stateId}
-                                        onChange={handleStateChange}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="lga"
-                                        label="Select Local Government Area"
-                                        options={lgaOptions}
-                                        value={lgaId}
-                                        onChange={setLgaId}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <InputField
-                                        id="address"
-                                        label="Home Address"
-                                        value={homeAddress}
-                                        onChange={(e) => setHomeAddress(e.target.value)}
-                                    />
-                                </div>
                             </div>
                         </div>
-
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>STAFF ACCOUNT INFORMATION</h3>
-
-                            <div className={styles.fieldGroup}>
-                                <div className={styles.third}>
-                                    <InputField
-                                        id="staffId"
-                                        label="Staff ID"
-                                        value={staff?.staffId || ""}
-                                        readOnly
-                                    />
-                                </div>
-
-                                <div className={styles.third}>
-                                    <InputField
-                                        id="createdTime"
-                                        label="Created Time"
-                                        value={staff?.createdAt || ""}
-                                        readOnly
-                                    />
-                                </div>
-
-                                <div className={styles.third}>
-                                    <InputField
-                                        id="lastLogin"
-                                        label="Last Login"
-                                        value={staff?.lastLoginAt || ""}
-                                        readOnly
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>ADMINISTRATIVE INFORMATION</h3>
-
-                            <div className={styles.fieldGroup}>
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="role"
-                                        label="Select Role"
-                                        options={roleOptions}
-                                        value={roleId}
-                                        onChange={setRoleId}
-                                    />
-                                </div>
-
-                                <div className={styles.half}>
-                                    <SelectField
-                                        id="status"
-                                        label="Select Status"
-                                        options={statusOptions}
-                                        value={statusId}
-                                        onChange={setStatusId}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="max-w-50 flex justify-end items-end">
-                            <Button
-                                id="update-btn"
-                                text="UPDATE PROFILE"
-                                type="button"
-                            />
-                        </div>
-
                     </div>
-                </div>
-
-            </div>
+                )
+            }
         </div>
     );
 };

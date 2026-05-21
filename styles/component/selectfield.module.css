@@ -61,11 +61,13 @@
     padding: 10px;
     border-bottom: 1px solid #eee;
     outline: none;
+    color: var( --text-color);
 }
 
 .option {
     padding: 10px 15px;
     cursor: pointer;
+    color: var( --text-color);
 }
 
 .option:hover {
