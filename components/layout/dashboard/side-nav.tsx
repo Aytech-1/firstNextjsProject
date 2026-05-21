@@ -120,9 +120,8 @@ const Sidebar = () => {
                         <li key={item.link} className="w-full">
                             <Link
                                 href={item.link}
-                                className={`${styles.list} ${
-                                    isActive ? styles.active : ""
-                                }`}
+                                className={`${styles.list} ${isActive ? styles.active : ""
+                                    }`}
                             >
                                 <item.icon size={19} />
                                 <span className={styles.span}>
