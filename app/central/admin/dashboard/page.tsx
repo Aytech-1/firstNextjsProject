@@ -3,6 +3,7 @@ import styles from "@/styles/component/dashboard.module.css";
 import { StatisticCardItem } from "@/data/statistic-card-item"
 import Link from "next/link";
 import { useUser } from "@/app/context/usercontext"
+import {capitalizeWords} from "@/lib/capitalize"
 
 import {
     LayoutDashboard
@@ -22,7 +23,7 @@ const Dashboard = () => {
           </div>
 
           <div className={styles.headerText}>
-            <h2>👋 Welcome Back, {user?.firstName} {user?.lastName}!</h2>
+          <h2>👋 Welcome Back,{" "}{capitalizeWords(`${user?.title?.titleName}. ${user?.firstName} ${user?.lastName}`)} !</h2>
 
             <p>
               Welcome to your dashboard, where you can oversee all your
