@@ -18,9 +18,10 @@ import { Loader } from "lucide-react";
 const ViewStaffProfile = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
-    const token = typeof window !== "undefined" ? sessionStorage.getItem("accessToken") : null;
     const router = useRouter();
-    const { staffId } = useParams();
+    const params = useParams();
+    const staffId = params.staffId as string;
+
     const [staff, setStaff] = useState<Staff | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -57,7 +58,9 @@ const ViewStaffProfile = () => {
         async function fetchAll() {
             try {
                 setLoading(true);
-                
+
+                const token = sessionStorage.getItem("accessToken");
+
                 const [
                     staffRes,
                     titles,
