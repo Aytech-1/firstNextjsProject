@@ -29,6 +29,15 @@ export interface People {
     statusId: number;
     statusName: string;
   };
+
+  location: {
+    lgaId: number;
+    lgaName: string;
+    stateId: number;
+    stateName: string;
+    countryId: number;
+    countryName: string;
+  };
 }
 
 export type WeatherData = {
