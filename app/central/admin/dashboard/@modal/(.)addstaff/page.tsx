@@ -1,36 +1,47 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UserPlus, X } from "lucide-react";
 import InputField from "@/components/ui/text-field";
 import SelectField from "@/components/ui/select-field";
 import Button from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
+import { GetSelectOptions } from "@/lib/preset-data";
+import { SelectOption } from "@/types/ui";
 
 const AddStaffPage = () => {
     const router = useRouter();
-
-    const [title, setTitle] = useState("");
-    const titleOptions = [
-        { label: "MR", value: "MR" },
-        { label: "MRS", value: "MRS" },
-        { label: "DR", value: "DR" },
-    ];
-
-    const [gender, setGender] = useState("");
-    const genderOptions = [
-        { label: "Male", value: "male" },
-        { label: "Female", value: "female" },
-    ];
-
-    const [role, setRole] = useState("");
-    const roleOptions = [
-        { label: "Admin", value: "admin" },
-        { label: "Staff", value: "staff" },
-    ];
-
     const { showToast } = useToast();
+
+    const [titleId, setTitleId] = useState<number | null>(null);
+    const [titleOptions, setTitleOptions] = useState<SelectOption[]>([]);
+
+    const [genderId, setGenderId] = useState<number | null>(null);
+    const [genderOptions, setGenderOptions] = useState<SelectOption[]>([]);
+
+    const [roleId, setRoleId] = useState<number | null>(null);
+    const [roleOptions, setRoleOptions] = useState<SelectOption[]>([]);
+
+    useEffect(() => {
+        async function loadOptions() {
+            const [
+                titles,
+                genders,
+                roles,
+            ] = await Promise.all([
+                GetSelectOptions("/setup/titles", "titleName", "titleId"),
+                GetSelectOptions("/setup/genders", "genderName", "genderId"),
+                GetSelectOptions("/central/role", "name", "id"),
+            ]);
+
+            setTitleOptions(titles);
+            setGenderOptions(genders);
+            setRoleOptions(roles);
+        }
+
+        loadOptions();
+    }, []);
 
     return (
         <div className="absolute right-0 w-112.5 h-full bg-[#f8f8f8] animate__animated animate__fadeInRight">
@@ -77,8 +88,8 @@ const AddStaffPage = () => {
                                     id="title"
                                     label="Select Title"
                                     options={titleOptions}
-                                    value={title}
-                                    onChange={setTitle}
+                                    value={titleId}
+                                    onChange={setTitleId}
                                 />
 
                                 <InputField
@@ -121,8 +132,8 @@ const AddStaffPage = () => {
                                     id="gender"
                                     label="Select Gender"
                                     options={genderOptions}
-                                    value={gender}
-                                    onChange={setGender}
+                                    value={genderId}
+                                    onChange={setGenderId}
                                 />
 
                                 <div className="bg-[rgba(46,204,113,0.05)] p-4 border border-[rgba(46,204,113,0.4)] rounded flex flex-col gap-4">
@@ -134,8 +145,8 @@ const AddStaffPage = () => {
                                         id="role"
                                         label="Select Role"
                                         options={roleOptions}
-                                        value={role}
-                                        onChange={setRole}
+                                        value={roleId}
+                                        onChange={setRoleId}
                                     />
                                 </div>
 
@@ -151,7 +162,7 @@ const AddStaffPage = () => {
                                         id="toast-btn"
                                         text="SHOW TOAST"
                                         type="button"
-                                        onClick={() => showToast("Staff created successfully") }
+                                        onClick={() => showToast("Staff created successfully")}
                                     />
                                 </div>
 

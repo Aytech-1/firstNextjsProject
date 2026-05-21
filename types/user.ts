@@ -2,11 +2,13 @@ export interface People {
   firstName: string;
   middleName: string;
   lastName: string;
-  phoneNumber: number;
-  email: string;
+  mobileNumber: string;
+  emailAddress: string;
+  dateOfBirth: string;
   homeAddress: string;
   nin: number;
   lastLoginAt: string;
+  createdAt: string;
   state: {
     stateId: number;
     stateName: string;
@@ -27,9 +29,14 @@ export interface People {
     statusId: number;
     statusName: string;
   };
-  role: {
-    roleId: number;
-    roleName: string;
+
+  location: {
+    lgaId: number;
+    lgaName: string;
+    stateId: number;
+    stateName: string;
+    countryId: number;
+    countryName: string;
   };
 }
 
@@ -46,4 +53,8 @@ export interface User extends People {
 
 export interface Staff extends People {
   staffId: string;
+  role: {
+    roleId: number;
+    roleName: string;
+  };
 }
