@@ -3,11 +3,13 @@ import Header from "@/components/layout/dashboard/header";
 import SideNav from "@/components/layout/dashboard/side-nav";
 import Image from "next/image";
 import { DashboardProvider } from "@/app/context/dashboardcontext";
+import { UserProvider } from '@/app/context/usercontext';
 
 const DashboardLayout = ({ children, modal }: LayoutProps) => {
   return (
     <>
       <DashboardProvider>
+        <UserProvider>
         <div className=" w-full h-screen">
           <Image
             src="/all-images/bg-pix/adminbg.jpg"
@@ -23,6 +25,7 @@ const DashboardLayout = ({ children, modal }: LayoutProps) => {
           {modal}
 
         </div>
+        </UserProvider>
       </DashboardProvider>
     </>
   );

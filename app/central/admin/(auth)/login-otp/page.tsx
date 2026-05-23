@@ -6,14 +6,12 @@ import { useRouter } from 'next/navigation'
 import InputField from "@/components/ui/text-field";
 import Button from "@/components/ui/button";
 import { useState } from "react";
-import { useUser } from "@/app/context/usercontext";
 
 const LoginOtp = () => {
     const router = useRouter();
     const [otp, setOtp] = useState("");
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
-    const { refreshUser } = useUser();
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
@@ -52,7 +50,6 @@ const LoginOtp = () => {
                 showToast(data.message);
                 sessionStorage.setItem("accessToken", data.accessToken);
                 sessionStorage.removeItem("emailAddress");
-                await refreshUser();
                 router.push('/central/admin/dashboard');
             } else {
                 showToast(data.message, "error");
