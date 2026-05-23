@@ -11,7 +11,10 @@ import { Staff } from "@/types/user";
 
 interface UserContextType {
     user: Staff | null;
+    token: string | null;
+    hasPermission: (permission: string) => boolean;
     setUser: React.Dispatch<React.SetStateAction<Staff | null>>;
+    setToken: React.Dispatch<React.SetStateAction<string | null>>;
     refreshUser: () => Promise<void>;
 }
 
@@ -25,14 +28,19 @@ export function UserProvider({
 }: {
     children: React.ReactNode;
 }) {
+    const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<Staff | null>(null);
+    const hasPermission = (permission: string) => {
+    return user?.role.permissions.includes(permission) ?? false;
+  };
 
     const refreshUser = async () => {
         try {
-            const token = sessionStorage.getItem("accessToken");
+            const savedToken = sessionStorage.getItem("accessToken");
 
-            if (!token) {
+            if (!savedToken) {
                 setUser(null);
+                setToken(null);
                 return;
             }
 
@@ -46,7 +54,7 @@ export function UserProvider({
                         "Content-Type": "application/json",
                         "x-api-key": APP_KEY,
                         "x-device-id": getDeviceId(),
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `Bearer ${savedToken}`,
                     },
                 }
             );
@@ -58,9 +66,11 @@ export function UserProvider({
 
             const data = await response.json();
             setUser(data.data ?? data);
+            setToken(savedToken);
         } catch (error) {
             console.error("Failed to fetch user profile:", error);
             setUser(null);
+            setToken(null);
         }
     };
 
@@ -72,7 +82,10 @@ export function UserProvider({
         <UserContext.Provider
             value={{
                 user,
+                token,
+                hasPermission,
                 setUser,
+                setToken,
                 refreshUser,
             }}
         >

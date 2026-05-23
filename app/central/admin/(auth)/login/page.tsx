@@ -16,7 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
-     const { refreshUser } = useUser();
+    const { refreshUser } = useUser();
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
@@ -60,7 +60,6 @@ const Login = () => {
                 sessionStorage.clear(); 
                 if (data.accessToken) {
                     sessionStorage.setItem("accessToken", data.accessToken);
-                    sessionStorage.setItem("permissions", data.permissions);
                     await refreshUser();
                     showToast(data.message);
                     router.push('/central/admin/dashboard');
