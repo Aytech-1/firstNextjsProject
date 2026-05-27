@@ -6,6 +6,7 @@ import { UserPlus, X, Plus, Trash2 } from "lucide-react";
 import InputField from "@/components/ui/text-field";
 import Button from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
+import { getDeviceId } from "@/lib/device";
 
 interface FacultyItem {
     facultyCode: string;
@@ -15,7 +16,6 @@ interface FacultyItem {
 const AddFacultyPage = () => {
     const router = useRouter();
     const { showToast } = useToast();
-    
     // 1. Manage state as an array of faculty objects
     const [faculties, setFaculties] = useState<FacultyItem[]>([
         { facultyCode: "", facultyName: "" }
@@ -45,32 +45,43 @@ const AddFacultyPage = () => {
         // Simple client-side validation check
         const hasEmptyCodes = faculties.some(f => !f.facultyCode.trim());
         if (hasEmptyCodes) {
-            showToast(  "Please fill in all Faculty Codes.", "error");
+            showToast("Please fill in all Faculty Codes.", "error");
             return;
         }
 
         setIsSubmitting(true);
         try {
-            // Replace with your actual environment config or dynamic API base path
-            const response = await fetch("http://localhost:8000/api/central/admin/faculty/store", {
+            const token = sessionStorage.getItem("accessToken");
+            const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "";
+            const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY || "";
+
+
+            const response = await fetch(`${BASE_URL}/higher/faculty`, {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json",
-                    "X-Branch-Id": "CAM001", // Swap with your active context state/cookie if dynamic
+                    "Authorization": `Bearer ${token}`,
+                    "X-Branch-Id": "CAM001",
+                    "X-App-Key": APP_KEY,
+                    "x-device-id": getDeviceId(),
                 },
-                body: JSON.stringify({ faculties }), // Payload strictly matches your backend array request map
+
+                body: JSON.stringify({
+                    faculties
+                }),
             });
 
             const result = await response.json();
 
             if (response.ok && result.success) {
-                showToast(result.message || "Faculties saved successfully!",  "success"  );
+                showToast(result.message || "Faculties saved successfully!", "success");
                 router.back();
             } else {
-                showToast(  result.message || "Validation or server setup error occurred.", "error");
+                showToast(result.message || "Validation or server setup error occurred.", "error");
             }
         } catch (error) {
-            showToast(  "Network error. Please try again later.", "error");
+            showToast("Network error. Please try again later.", "error");
         } finally {
             setIsSubmitting(false);
         }
@@ -107,11 +118,11 @@ const AddFacultyPage = () => {
 
                 <div className="flex justify-center py-5 bg-[#f8f8f8]">
                     <div className="w-[90%] flex flex-col gap-4">
-                        
+
                         {/* Loop dynamically through entries state */}
                         {faculties.map((faculty, index) => (
                             <div key={index} className="bg-white rounded shadow p-4 flex flex-col gap-5 relative">
-                                
+
                                 <div className="flex items-center justify-between border-b pb-2">
                                     <div className="flex items-center gap-2">
                                         <UserPlus size={18} className="text-(--primary-color2)" />
@@ -137,7 +148,7 @@ const AddFacultyPage = () => {
                                         id={`facultyCode-${index}`}
                                         label="Faculty Code"
                                         value={faculty.facultyCode}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                             handleInputChange(index, "facultyCode", e.target.value)
                                         }
                                     />
@@ -146,10 +157,10 @@ const AddFacultyPage = () => {
                                         id={`facultyName-${index}`}
                                         label="Faculty Name"
                                         value={faculty.facultyName}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                             handleInputChange(index, "facultyName", e.target.value)
                                         }
-                                    /> 
+                                    />
                                 </div>
                             </div>
                         ))}
