@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { UserPlus, X, Plus, Trash2 } from "lucide-react";
+import { UserPlus, X, Plus, Trash2, CheckCheck, Loader } from "lucide-react";
 import InputField from "@/components/ui/text-field";
 import Button from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast-provider";
@@ -56,15 +56,17 @@ const AddFacultyPage = () => {
             const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY || "";
 
 
-            const response = await fetch(`${BASE_URL}/higher/faculty`, {
+            const response = await fetch(`${BASE_URL}/central/higherinstitution/faculty`, {
                 method: "POST",
 
                 headers: {
+                    'Accept': 'application/json',
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`,
-                    "X-Branch-Id": "CAM001",
-                    "X-App-Key": APP_KEY,
-                    "x-device-id": getDeviceId(),
+                    Authorization: `Bearer ${token}`,
+                    "x-branch-Id": "BRANCH00120260219042712417605",
+                    'x-api-key': APP_KEY ?? '',
+                    'x-device-id': getDeviceId(),
+                    'X-school-domain': "eduserve-platform"
                 },
 
                 body: JSON.stringify({
@@ -182,6 +184,7 @@ const AddFacultyPage = () => {
                                     type="button"
                                     disabled={isSubmitting}
                                     onClick={handleSubmit}
+                                    leftIcon={isSubmitting ? <Loader className="animate-spin" /> : <CheckCheck />}
                                 />
                             </div>
                         </div>
