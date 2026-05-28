@@ -1,15 +1,38 @@
+'use client';
+
 import { LayoutProps } from "@/types/ui";
 import Header from "@/components/layout/dashboard/header";
 import SideNav from "@/components/layout/dashboard/side-nav";
 import Image from "next/image";
 import { DashboardProvider } from "@/app/context/dashboardcontext";
-import { UserProvider } from '@/app/context/usercontext';
+import { useUser } from "@/app/context/usercontext";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Preloader } from "@/components/ui/preloader";
 
 const DashboardLayout = ({ children, modal }: LayoutProps) => {
+  const router = useRouter();
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('accessToken');
+
+    if (!token) {
+      router.replace('/central/admin/login');
+    } else {
+      setChecked(true);
+    }
+  }, [router]);
+
+  const { loadingUser } = useUser();
+
+  if (loadingUser || !checked) {
+    return <Preloader />;
+  }
+
   return (
     <>
       <DashboardProvider>
-        <UserProvider>
         <div className=" w-full h-screen">
           <Image
             src="/all-images/bg-pix/adminbg.jpg"
@@ -23,9 +46,7 @@ const DashboardLayout = ({ children, modal }: LayoutProps) => {
             {children}
           </main>
           {modal}
-
         </div>
-        </UserProvider>
       </DashboardProvider>
     </>
   );

@@ -8,13 +8,16 @@ import React, {
 } from "react";
 import { getDeviceId } from "@/lib/device";
 import { Staff } from "@/types/user";
+import { useModal } from "@/components/ui/modal-provider";
 
 interface UserContextType {
-    user: Staff | null;
+    loadingUser: boolean;
     token: string | null;
+    user: Staff | null;
     hasPermission: (permission: string) => boolean;
     setUser: React.Dispatch<React.SetStateAction<Staff | null>>;
     setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    setLoadingUser: React.Dispatch<React.SetStateAction<boolean>>;
     refreshUser: () => Promise<void>;
 }
 
@@ -30,17 +33,20 @@ export function UserProvider({
 }) {
     const [token, setToken] = useState<string | null>(null);
     const [user, setUser] = useState<Staff | null>(null);
+    const [loadingUser, setLoadingUser] = useState(true);
     const hasPermission = (permission: string) => {
-    return user?.role.permissions.includes(permission) ?? false;
-  };
+        return user?.role.permissions.includes(permission) ?? false;
+    };
+    const { showModal } = useModal();
 
     const refreshUser = async () => {
         try {
             const savedToken = sessionStorage.getItem("accessToken");
-
+            
             if (!savedToken) {
                 setUser(null);
                 setToken(null);
+                setLoadingUser(false);
                 return;
             }
 
@@ -59,18 +65,46 @@ export function UserProvider({
                 }
             );
 
-            if (!response.ok) {
+            if (response.status === 401) {
                 setUser(null);
+                setToken(null);
+                showModal({
+                    title: "Session Expired",
+                    description: "Your session has expired. Please log in again.",
+                    confirmText: "Okay",
+                    onConfirm: async () => {
+                        sessionStorage.removeItem("accessToken");
+                        window.location.href = "/central/admin/login";
+                    },
+                });
+                setLoadingUser(false);
                 return;
             }
 
-            const data = await response.json();
-            setUser(data.data ?? data);
-            setToken(savedToken);
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.data ?? data);
+                setToken(savedToken);
+            } else {
+                setUser(null);
+                setToken(null);
+                showModal({
+                    title: "Error",
+                    description: "Failed to fetch user profile. Please log in again.",
+                    confirmText: "Okay",
+                    onConfirm: async () => {
+                        sessionStorage.removeItem("accessToken");
+                        window.location.href = "/central/admin/login";
+                    },
+                });
+            }
+
         } catch (error) {
             console.error("Failed to fetch user profile:", error);
             setUser(null);
             setToken(null);
+        } finally {
+            setLoadingUser(false);
         }
     };
 
@@ -81,11 +115,13 @@ export function UserProvider({
     return (
         <UserContext.Provider
             value={{
-                user,
+                loadingUser,
                 token,
+                user,
                 hasPermission,
                 setUser,
                 setToken,
+                setLoadingUser,
                 refreshUser,
             }}
         >

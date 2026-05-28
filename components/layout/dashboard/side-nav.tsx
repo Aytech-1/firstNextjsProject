@@ -27,7 +27,7 @@ const Sidebar = () => {
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
-    const { setUser, setToken, token } = useUser();
+    const { setUser, setToken, token, setLoadingUser } = useUser();
 
     async function logout(): Promise<void> {
 
@@ -79,6 +79,7 @@ const Sidebar = () => {
             cancelText: "No, Stay Logged In",
             confirmText: "Yes, Logout",
             onConfirm: async () => {
+                setLoadingUser(true);
                 await logout();
             },
         });

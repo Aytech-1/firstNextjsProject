@@ -19,7 +19,7 @@ const StaffPage = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
     const router = useRouter();
-    const { hasPermission, token } = useUser();
+    const { token, hasPermission } = useUser();
 
     const [staff, setStaff] = useState<Staff[]>([]);
     const [loading, setLoading] = useState(true);
@@ -68,7 +68,7 @@ const StaffPage = () => {
 
         fetchStaff();
 
-    }, [hasPermission, router]);
+    }, [hasPermission, router, token]);
 
     return (
         <div className="w-full flex flex-col">

@@ -57,12 +57,12 @@ const Login = () => {
             if (data.success) {
                 sessionStorage.clear(); 
                 if (data.accessToken) {
-                    sessionStorage.setItem("accessToken", data.accessToken);
+                    sessionStorage.setItem('accessToken', data.accessToken);
                     showToast(data.message);
                     router.push('/central/admin/dashboard');
                 } else {
                     showToast(data.message);
-                    sessionStorage.setItem("emailAddress", emailAddress);
+                    sessionStorage.setItem('emailAddress', emailAddress);
                     router.push('/central/admin/login-otp');
                 }
             } else {

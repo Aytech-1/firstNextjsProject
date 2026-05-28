@@ -25,13 +25,7 @@ const ViewStaffProfile = () => {
 
     const staffId = params.staffId as string;
 
-    const {
-        titles,
-        genders,
-        countries,
-        roles,
-        statuses,
-    } = useDashboard();
+    const { titles, genders, countries, roles, statuses } = useDashboard();
 
     const [staff, setStaff] = useState<Staff | null>(null);
     const [loading, setLoading] = useState(false);
@@ -98,7 +92,6 @@ const ViewStaffProfile = () => {
                 setStatusId(staffData?.status?.statusId || null);
 
                 const fetchedCountryId = staffData?.location?.countryId;
-
                 const fetchedStateId = staffData?.location?.stateId;
 
                 if (fetchedCountryId && fetchedStateId) {
@@ -270,11 +263,7 @@ const ViewStaffProfile = () => {
                                             id="firstName"
                                             label="First Name"
                                             value={firstName}
-                                            onChange={(e) =>
-                                                setFirstName(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setFirstName(e.target.value)}
                                         />
                                     </div>
 
@@ -283,11 +272,7 @@ const ViewStaffProfile = () => {
                                             id="middleName"
                                             label="Middle Name"
                                             value={middleName}
-                                            onChange={(e) =>
-                                                setMiddleName(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setMiddleName(e.target.value)}
                                         />
                                     </div>
 
@@ -296,11 +281,7 @@ const ViewStaffProfile = () => {
                                             id="lastName"
                                             label="Last Name"
                                             value={lastName}
-                                            onChange={(e) =>
-                                                setLastName(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setLastName(e.target.value)}
                                         />
                                     </div>
 
@@ -319,11 +300,7 @@ const ViewStaffProfile = () => {
                                             id="phone"
                                             label="Phone Number"
                                             value={mobileNumber}
-                                            onChange={(e) =>
-                                                setMobileNumber(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setMobileNumber(e.target.value)}
                                         />
                                     </div>
 
@@ -333,11 +310,7 @@ const ViewStaffProfile = () => {
                                             label="Email Address"
                                             type="email"
                                             value={emailAddress}
-                                            onChange={(e) =>
-                                                setEmailAddress(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setEmailAddress(e.target.value)}
                                         />
                                     </div>
 
@@ -347,11 +320,7 @@ const ViewStaffProfile = () => {
                                             label="Date Of Birth"
                                             type="date"
                                             value={dateOfBirth}
-                                            onChange={(e) =>
-                                                setDateOfBirth(
-                                                    e.target.value
-                                                )
-                                            }
+                                            onChange={(e) => setDateOfBirth(e.target.value)}
                                         />
                                     </div>
                                 </div>
@@ -369,37 +338,29 @@ const ViewStaffProfile = () => {
                                             label="Select Country"
                                             options={countries}
                                             value={countryId}
-                                            onChange={
-                                                handleCountryChange
-                                            }
+                                            onChange={handleCountryChange}
                                         />
                                     </div>
 
-                                    {countryId && (
-                                        <div className={styles.half}>
-                                            <SelectField
-                                                id="state"
-                                                label="Select State"
-                                                options={stateOptions}
-                                                value={stateId}
-                                                onChange={
-                                                    handleStateChange
-                                                }
-                                            />
-                                        </div>
-                                    )}
+                                    <div className={styles.half}>
+                                        <SelectField
+                                            id="state"
+                                            label="Select State"
+                                            options={stateOptions}
+                                            value={stateId}
+                                            onChange={handleStateChange}
+                                        />
+                                    </div>
 
-                                    {stateId && (
-                                        <div className={styles.half}>
-                                            <SelectField
-                                                id="lga"
-                                                label="Select Local Government Area"
-                                                options={lgaOptions}
-                                                value={lgaId}
-                                                onChange={setLgaId}
-                                            />
-                                        </div>
-                                    )}
+                                    <div className={styles.half}>
+                                        <SelectField
+                                            id="lga"
+                                            label="Select Local Government Area"
+                                            options={lgaOptions}
+                                            value={lgaId}
+                                            onChange={setLgaId}
+                                        />
+                                    </div>
 
                                     <div className={styles.half}>
                                         <InputField
@@ -426,9 +387,7 @@ const ViewStaffProfile = () => {
                                         <InputField
                                             id="staffId"
                                             label="Staff ID"
-                                            value={
-                                                staff?.staffId || ""
-                                            }
+                                            value={staff?.staffId || ""}
                                             readOnly
                                         />
                                     </div>
@@ -437,9 +396,7 @@ const ViewStaffProfile = () => {
                                         <InputField
                                             id="createdTime"
                                             label="Created Time"
-                                            value={
-                                                staff?.createdAt || ""
-                                            }
+                                            value={staff?.createdAt || ""}
                                             readOnly
                                         />
                                     </div>
@@ -448,9 +405,7 @@ const ViewStaffProfile = () => {
                                         <InputField
                                             id="lastLogin"
                                             label="Last Login"
-                                            value={
-                                                staff?.lastLoginAt || ""
-                                            }
+                                            value={staff?.lastLoginAt || ""}
                                             readOnly
                                         />
                                     </div>

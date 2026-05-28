@@ -19,7 +19,7 @@ export function useSidebarItems() {
       icon: LayoutGrid,
     },
 
-    hasPermission("manage schools") && {
+    hasPermission("manage staff") && {
       name: "staff",
       link: "/central/admin/dashboard/staff",
       icon: Users,
