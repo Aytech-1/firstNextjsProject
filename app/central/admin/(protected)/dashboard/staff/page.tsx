@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { getDeviceId } from "@/lib/device";
 import { Staff } from "@/types/user";
 import { useUser } from "@/app/context/usercontext";
-import { useDashboard } from "@/app/context/dashboardcontext";
+import { useDashboard } from "@/app/context/dashboard-context";
 
 const StaffPage = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";

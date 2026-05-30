@@ -4,7 +4,7 @@ import { LayoutProps } from "@/types/ui";
 import Header from "@/components/layout/dashboard/header";
 import SideNav from "@/components/layout/dashboard/side-nav";
 import Image from "next/image";
-import { DashboardProvider } from "@/app/context/dashboardcontext";
+import { DashboardProvider } from "@/app/context/dashboard-context";
 import { useUser } from "@/app/context/usercontext";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';

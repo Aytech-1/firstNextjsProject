@@ -12,7 +12,7 @@ import { getDeviceId } from "@/lib/device";
 import { useEffect, useState } from "react";
 import { SelectOption } from "@/types/ui";
 import { Staff } from "@/types/user";
-import { useDashboard } from "@/app/context/dashboardcontext";
+import { useDashboard } from "@/app/context/dashboard-context";
 import { useUser } from "@/app/context/usercontext";
 
 const ViewStaffProfile = () => {
