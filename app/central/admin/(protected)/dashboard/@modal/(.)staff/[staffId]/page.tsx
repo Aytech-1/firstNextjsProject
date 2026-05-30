@@ -16,16 +16,12 @@ import { useDashboard } from "@/app/context/dashboardcontext";
 import { useUser } from "@/app/context/usercontext";
 
 const ViewStaffProfile = () => {
-    const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
-    const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY ?? "";
-    const { token } = useUser();
-
     const router = useRouter();
     const params = useParams();
 
     const staffId = params.staffId as string;
 
-    const { titles, genders, countries, roles, statuses } = useDashboard();
+    const { titles, genders, countries, roles, statuses, getStaffById } = useDashboard();
 
     const [staff, setStaff] = useState<Staff | null>(null);
     const [loading, setLoading] = useState(false);
@@ -55,55 +51,38 @@ const ViewStaffProfile = () => {
             try {
                 setLoading(true);
 
-                const response = await fetch(
-                    `${BASE_URL}/central/staff/${staffId}`,
-                    {
-                        cache: "no-store",
-                        method: "GET",
-                        headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            "x-api-key": APP_KEY,
-                            "x-device-id": getDeviceId(),
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                );
+                const staff = getStaffById(staffId);
+                if (!staff) return;
 
-                const data = await response.json();
-                const staffData = data?.data || null;
+                setStaff(staff);
+                setFirstName(staff.firstName || "");
+                setMiddleName(staff.middleName || "");
+                setLastName(staff.lastName || "");
+                setEmailAddress(staff.emailAddress || "");
+                setMobileNumber(staff.mobileNumber || "");
+                setDateOfBirth(staff.dateOfBirth || "");
+                setHomeAddress(staff.homeAddress || "");
+                setTitleId(staff.title?.titleId || null);
+                setGenderId(staff.gender?.genderId || null);
+                setCountryId(staff.location?.countryId || null);
+                setStateId(staff.location?.stateId || null);
+                setLgaId(staff.location?.lgaId || null);
+                setRoleId(staff.role?.roleId || null);
+                setStatusId(staff.status?.statusId || null);
 
-                setStaff(staffData);
+                const staffCountryId = staff.location?.countryId;
+                const staffStateId = staff.location?.stateId;
 
-                setFirstName(staffData?.firstName || "");
-                setMiddleName(staffData?.middleName || "");
-                setLastName(staffData?.lastName || "");
-                setEmailAddress(staffData?.emailAddress || "");
-                setMobileNumber(staffData?.mobileNumber || "");
-                setDateOfBirth(staffData?.dateOfBirth || "");
-                setHomeAddress(staffData?.homeAddress || "");
-
-                setTitleId(staffData?.title?.titleId || null);
-                setGenderId(staffData?.gender?.genderId || null);
-                setCountryId(staffData?.location?.countryId || null);
-                setStateId(staffData?.location?.stateId || null);
-                setLgaId(staffData?.location?.lgaId || null);
-                setRoleId(staffData?.role?.roleId || null);
-                setStatusId(staffData?.status?.statusId || null);
-
-                const fetchedCountryId = staffData?.location?.countryId;
-                const fetchedStateId = staffData?.location?.stateId;
-
-                if (fetchedCountryId && fetchedStateId) {
+                if (staffCountryId && staffStateId) {
                     const [states, lgas] = await Promise.all([
                         GetSelectOptions(
-                            `/setup/states?countryId=${fetchedCountryId}`,
+                            `/setup/states?countryId=${staffCountryId}`,
                             "stateName",
                             "stateId"
                         ),
 
                         GetSelectOptions(
-                            `/setup/lga?stateId=${fetchedStateId}`,
+                            `/setup/lga?stateId=${staffStateId}`,
                             "localGovernmentName",
                             "localGovernmentId"
                         ),
@@ -111,9 +90,9 @@ const ViewStaffProfile = () => {
 
                     setStateOptions(states);
                     setLgaOptions(lgas);
-                } else if (fetchedCountryId) {
+                } else if (staffCountryId) {
                     const states = await GetSelectOptions(
-                        `/setup/states?countryId=${fetchedCountryId}`,
+                        `/setup/states?countryId=${staffCountryId}`,
                         "stateName",
                         "stateId"
                     );

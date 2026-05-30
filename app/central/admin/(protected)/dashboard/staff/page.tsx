@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { getDeviceId } from "@/lib/device";
 import { Staff } from "@/types/user";
 import { useUser } from "@/app/context/usercontext";
+import { useDashboard } from "@/app/context/dashboardcontext";
 
 const StaffPage = () => {
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
@@ -21,6 +22,7 @@ const StaffPage = () => {
     const router = useRouter();
     const { token, hasPermission } = useUser();
 
+    const { setStaffList } = useDashboard();
     const [staff, setStaff] = useState<Staff[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -56,7 +58,9 @@ const StaffPage = () => {
 
                 const data = await response.json();
 
-                setStaff(Array.isArray(data.data) ? data.data: []);
+                const staffData = Array.isArray(data.data) ? data.data : [];
+                setStaff(staffData);
+                setStaffList(staffData);
             } catch (err) {
                 if (err instanceof Error) {
                     setError(err.message);

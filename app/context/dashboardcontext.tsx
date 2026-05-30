@@ -9,6 +9,7 @@ import {
 
 import { LoadPresetData } from "@/lib/preset-data";
 import { SelectOption } from "@/types/ui";
+import { Staff } from "@/types/user";
 
 interface DashboardContextType {
     titles: SelectOption[];
@@ -17,6 +18,9 @@ interface DashboardContextType {
     roles: SelectOption[];
     statuses: SelectOption[];
     loading: boolean;
+    staffList: Staff[];
+    setStaffList: React.Dispatch<React.SetStateAction<Staff[]>>;
+    getStaffById: (id: string) => Staff | null;
 }
 
 const DashboardContext = createContext<
@@ -33,6 +37,9 @@ export function DashboardProvider({
     const [countries, setCountries] = useState<SelectOption[]>([]);
     const [roles, setRoles] = useState<SelectOption[]>([]);
     const [statuses, setStatuses] = useState<SelectOption[]>([]);
+
+    const [staffList, setStaffList] = useState<Staff[]>([]);
+    const getStaffById = (id: string) => staffList.find(s => s.staffId === id) ?? null;
 
     const [loading, setLoading] = useState(true);
 
@@ -65,6 +72,9 @@ export function DashboardProvider({
                 roles,
                 statuses,
                 loading,
+                staffList, 
+                setStaffList, 
+                getStaffById
             }}
         >
             {children}
