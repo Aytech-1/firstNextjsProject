@@ -1,17 +1,20 @@
-import { TextFieldProps } from "@/types/ui";
+import { TextareaFieldProps } from "@/types/ui";
 import styles from "@/styles/component/textfield.module.css";
 
-const Textarea = (props: TextFieldProps) => {
+const Textarea = (props: TextareaFieldProps) => {
     return (
         <div className={styles.formGroup}>
             <textarea
                 id={props.id}
                 title={props.label}
-                className={ `${styles.floatingInput} ${props.className}` }
+                className={`${styles.floatingInput} ${props.className}`}
                 placeholder=" "
-                required value={props.value}
+                required
+                onChange={props.onChange}
+                value={props.value}
                 readOnly={props.readOnly}
                 maxLength={props.maxLength}
+       
             />
             <label
                 htmlFor={props.id}
