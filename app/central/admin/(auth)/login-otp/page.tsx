@@ -52,7 +52,6 @@ const LoginOtp = () => {
                 sessionStorage.clear();
                 showToast(data.message);
                 sessionStorage.setItem("accessToken", data.accessToken);
-                sessionStorage.setItem("permissions", data.permissions);
                 sessionStorage.removeItem("emailAddress");
                 await refreshUser();
                 router.push('/central/admin/dashboard');

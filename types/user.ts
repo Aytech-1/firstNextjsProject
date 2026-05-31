@@ -29,7 +29,6 @@ export interface People {
     statusId: number;
     statusName: string;
   };
-
   location: {
     lgaId: number;
     lgaName: string;
@@ -56,5 +55,6 @@ export interface Staff extends People {
   role: {
     roleId: number;
     roleName: string;
+    permissions: string[];
   };
 }
