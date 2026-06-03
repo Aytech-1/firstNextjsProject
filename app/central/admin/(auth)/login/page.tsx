@@ -15,10 +15,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const { showToast } = useToast();
-<<<<<<< HEAD
-    const { refreshUser } = useUser();
-=======
->>>>>>> develop
 
     const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
     const APP_KEY = process.env.NEXT_PUBLIC_APP_KEY;
