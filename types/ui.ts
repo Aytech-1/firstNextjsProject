@@ -18,6 +18,11 @@ export interface TextFieldProps {
   placeholder?: string;
 }
 
+export interface TextareaFieldProps extends Omit<TextFieldProps, "onChange" | "type"> {
+  value?: string;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+}
+
 export interface SelectOption {
   label: string;
   value: number;
