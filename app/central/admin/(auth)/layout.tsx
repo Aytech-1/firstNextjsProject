@@ -1,6 +1,28 @@
+'use client';
+
 import { LayoutProps } from "@/types/ui";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Preloader } from "@/components/ui/preloader";
 
 const AuthLayout = ({ children }: LayoutProps) => {
+  const router = useRouter();
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    const token = sessionStorage.getItem('accessToken');
+
+    if (token) {
+      router.replace('/central/admin/dashboard');
+    } else {
+      setChecked(true);
+    }
+  }, [router]);
+
+  if (!checked) {
+    return <Preloader />;
+  }
+
   return (
     <div className='w-full h-screen bg-black/60 flex justify-center items-center'>
       <div className="w-[80%] h-125 flex items-center">
@@ -22,7 +44,7 @@ const AuthLayout = ({ children }: LayoutProps) => {
       </div>
 
     </div>
-  )
+  );
 }
 
 export default AuthLayout

@@ -33,4 +33,32 @@ export async function GetSelectOptions(
         label: item[labelKey],
         value: item[valueKey],
     }));
-} 
+}
+
+export async function LoadPresetData() {
+    const [
+        titles,
+        genders,
+        countries,
+        roles,
+        statuses
+    ] = await Promise.all([
+        GetSelectOptions("/setup/titles", "titleName", "titleId"),
+        GetSelectOptions("/setup/genders", "genderName", "genderId"),
+        GetSelectOptions("/setup/countries", "countryName", "countryId"),
+        GetSelectOptions("/central/role", "roleName", "roleId"),
+        GetSelectOptions(
+            "/setup/statuses?statusId[]=1&statusId[]=2",
+            "statusName",
+            "statusId"
+        ),
+    ]);
+
+    return {
+        titles,
+        genders,
+        countries,
+        roles,
+        statuses
+    };
+}

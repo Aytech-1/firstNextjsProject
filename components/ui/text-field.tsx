@@ -15,7 +15,7 @@ const InputField = (props: TextFieldProps) => {
                 readOnly={props.readOnly}
                 maxLength={props.maxLength}
             />
-            <label
+            <label 
                 htmlFor={props.id}
                 className={ `${styles.floatingLabel}` }>{props.label}
             </label>
